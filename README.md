@@ -20,8 +20,8 @@
 ### 🎨 **Neumorphism 设计**
 采用新拟态设计风格，柔和的阴影和高光效果，现代化的视觉体验
 
-### 💿 **黑胶唱片效果**
-专辑封面圆形裁剪，33rpm 旋转动画，与播放状态同步
+### 💿 **歌单切歌**
+可以在填写的歌单内自由切换歌单里面的音乐
 
 ### 📱 **完全响应式**
 适配桌面端、平板和移动设备，支持触摸操作
@@ -348,8 +348,8 @@ player.setTheme('auto');   // 自动主题（跟随系统）
 ## 📞 联系方式
 
 - 📧 邮箱：[imbhcn@gmail.com](imbhcn@gmail.com)
-- 🐛 问题反馈：[GitHub Issues](https://github.com/numakkiyu/netease-mini-player/issues)
-- 💬 讨论交流：[GitHub Discussions](https://github.com/numakkiyu/netease-mini-player/discussions)
+- 🐛 问题反馈：[GitHub Issues](https://github.com/numakkiyu/NeteaseMiniPlayer/issues)
+- 💬 讨论交流：[GitHub Discussions](https://github.com/numakkiyu/NeteaseMiniPlayer/discussions)
 
 ---
 
