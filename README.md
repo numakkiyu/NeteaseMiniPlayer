@@ -1,7 +1,7 @@
 # 🎵 网易云音乐迷你播放器 NeteaseMiniPlayer v2
 
 <div align="center">
-
+  
 
 **基于 NeteaseCloudMusicApi 的网易云 API 二次开发 CDN 可插入式音乐播放器 UI 组件库**
 
@@ -94,9 +94,15 @@
 
 ```html
 <!-- 引入 CSS 文件 -->
+<!-- 推荐引入 jsDelivr CDN文件 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/numakkiyu/NeteaseMiniPlayer@v2.0.1/netease-mini-player-v2.css">
+<!-- 若访问过慢使用下面 CDN文件 -->
 <link rel="stylesheet" href="https://api.hypcvgm.top/NeteaseMiniPlayer/netease-mini-player-v2.css">
 
 <!-- 引入 JS 文件 -->
+<!-- 引入 jsDelivr CDN文件 -->
+<script src="https://cdn.jsdelivr.net/gh/numakkiyu/NeteaseMiniPlayer@v2.0.1/netease-mini-player-v2.js"></script>
+<!-- 若访问过慢使用下面 CDN文件 -->
 <script src="https://api.hypcvgm.top/NeteaseMiniPlayer/netease-mini-player-v2.js"></script>
 ```
 
