@@ -272,6 +272,31 @@
         border 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+
+.netease-mini-player[data-position="top-left"] {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    cursor: move;
+}
+
+.netease-mini-player[data-position="top-right"] {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    cursor: move;
+}
+
+.netease-mini-player[data-position="bottom-left"] {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    cursor: move;
+}
+
 .netease-mini-player[data-position="bottom-right"] {
     position: fixed;
     bottom: 20px;
