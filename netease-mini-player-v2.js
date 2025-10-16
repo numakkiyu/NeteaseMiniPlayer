@@ -37,12 +37,15 @@ class NeteaseMiniPlayer {
     }
     parseConfig() {
         const element = this.element;
+        const position = element.dataset.position || 'static';
+        const validPositions = ['static', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
+        const finalPosition = validPositions.includes(position) ? position : 'static';
         return {
             embed: element.dataset.embed === 'true',
             autoplay: element.dataset.autoplay === 'true',
             playlistId: element.dataset.playlistId,
             songId: element.dataset.songId,
-            position: element.dataset.position || 'static',
+            position: finalPosition,
             lyric: element.dataset.lyric !== 'false',
             theme: element.dataset.theme || 'auto',
             size: element.dataset.size || 'compact',
@@ -53,6 +56,7 @@ class NeteaseMiniPlayer {
         if (this.config.embed) {
             this.element.setAttribute('data-embed', 'true');
         }
+        this.element.setAttribute('data-position', this.config.position);
         this.initTheme();
         this.createPlayerHTML();
         this.bindEvents();
