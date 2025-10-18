@@ -1,4 +1,4 @@
-# 🎵 [NMP v2] NeteaseMiniPlayer v2 网易云音乐迷你播放器
+# 🎵 网易云音乐迷你播放器 NeteaseMiniPlayer v2
 
 <div align="center">
   
@@ -56,7 +56,7 @@
 
 ## 🏗️ 基于 NeteaseCloudMusicApi 构建
 
-本播放器基于开源项目 **NeteaseCloudMusicApi** 提供的接口服务，通过 API 代理实现跨域访问。当前演示使用 `iwenwiki.com:3000` 作为数据源。
+本播放器基于开源项目 **NeteaseCloudMusicApi** 提供的接口服务，通过 API 代理实现跨域访问。当前演示使用 **[墨染云](https://i9mr.com/)** 的`https://zm.i9mr.com` 作为数据源。
 
 > 💡 **提示：** 为获得更稳定的服务体验，建议在生产环境中部署自己的 NeteaseCloudMusicApi 实例
 
@@ -94,15 +94,9 @@
 
 ```html
 <!-- 引入 CSS 文件 -->
-<!-- 推荐引入 jsDelivr CDN文件 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/numakkiyu/NeteaseMiniPlayer@v2.0.1/netease-mini-player-v2.css">
-<!-- 若访问过慢使用下面 CDN文件 -->
 <link rel="stylesheet" href="https://api.hypcvgm.top/NeteaseMiniPlayer/netease-mini-player-v2.css">
 
 <!-- 引入 JS 文件 -->
-<!-- 引入 jsDelivr CDN文件 -->
-<script src="https://cdn.jsdelivr.net/gh/numakkiyu/NeteaseMiniPlayer@v2.0.1/netease-mini-player-v2.js"></script>
-<!-- 若访问过慢使用下面 CDN文件 -->
 <script src="https://api.hypcvgm.top/NeteaseMiniPlayer/netease-mini-player-v2.js"></script>
 ```
 
