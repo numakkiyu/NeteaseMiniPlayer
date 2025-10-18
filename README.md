@@ -1,4 +1,4 @@
-# 🎵 网易云音乐迷你播放器 NeteaseMiniPlayer v2
+# 🎵 [NMP v2] NeteaseMiniPlayer v2 网易云音乐迷你播放器
 
 <div align="center">
   
