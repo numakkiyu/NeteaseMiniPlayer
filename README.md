@@ -11,7 +11,7 @@
 
 > 注意：Netease Mini Player v1 版本过旧已弃用，不再提供维护，已归档
 
-> 在线演示：[https://api.hypcvgm.top/NeteaseMiniPlayer/v2/](https://api.hypcvgm.top/NeteaseMiniPlayer/v2/)
+> 在线演示：[https://nmp.hypcvgm.top/](https://nmp.hypcvgm.top/)
 ---
 
 ## ✨ 核心特性
