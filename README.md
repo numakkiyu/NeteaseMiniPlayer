@@ -1,7 +1,9 @@
 # 🎵 [NMP v2] NeteaseMiniPlayer v2 网易云音乐迷你播放器
 
 <div align="center">
-  
+
+<img width="861" height="430" alt="NMPV2" src="https://github.com/numakkiyu/NeteaseMiniPlayer/blob/main/NMPV2.png" />
+
 
 **基于 NeteaseCloudMusicApi 的网易云 API 二次开发 CDN 可插入式音乐播放器 UI 组件库**
 
