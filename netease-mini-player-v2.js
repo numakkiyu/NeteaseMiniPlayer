@@ -301,20 +301,24 @@ class NeteaseMiniPlayer {
         return null;
     }
     async loadPlaylist(playlistId) {
-        const cacheKey = this.getCacheKey('playlist', playlistId);
-        let playlistData = this.getCache(cacheKey);
-        if (!playlistData) {
-            const response = await this.apiRequest('/playlist/detail', { id: playlistId });
-            playlistData = response.playlist;
-            this.setCache(cacheKey, playlistData);
+        const cacheKey = this.getCacheKey('playlist_all', playlistId);
+        let tracks = this.getCache(cacheKey);
+        if (!tracks) {
+            const response = await this.apiRequest('/playlist/track/all', {
+                id: playlistId,
+                limit: 1000, 
+                offset: 0
+            });
+            tracks = response.songs; 
+            this.setCache(cacheKey, tracks);
         }
-        this.playlist = playlistData.tracks.map(track => ({
-            id: track.id,
-            name: track.name,
-            artists: track.ar.map(ar => ar.name).join(', '),
-            album: track.al.name,
-            picUrl: track.al.picUrl,
-            duration: track.dt
+        this.playlist = tracks.map(song => ({
+            id: song.id,
+            name: song.name,
+            artists: song.ar.map(ar => ar.name).join(', '),
+            album: song.al.name,
+            picUrl: song.al.picUrl,
+            duration: song.dt
         }));
         this.updatePlaylistDisplay();
     }
@@ -354,6 +358,16 @@ class NeteaseMiniPlayer {
     }
     async loadCurrentSong() {
         if (this.playlist.length === 0) return;
+        
+        if (this.showLyrics) {
+            this.elements.lyricLine.textContent = '♪ 加载歌词中... ♪';
+            this.elements.lyricTranslation.style.display = 'none';
+            this.elements.lyricLine.classList.remove('current', 'scrolling');
+            this.elements.lyricTranslation.classList.remove('current', 'scrolling');
+            this.lyrics = [];
+            this.currentLyricIndex = -1;
+        }
+        
         const song = this.playlist[this.currentIndex];
         this.currentSong = song;
         this.updateSongInfo(song);
@@ -486,8 +500,13 @@ class NeteaseMiniPlayer {
     }
     parseLyrics(lyricData) {
         this.lyrics = [];
-        if (!lyricData.lrc || !lyricData.lrc.lyric) {
+        this.currentLyricIndex = -1;
+        
+        if (!lyricData || (!lyricData.lrc?.lyric && !lyricData.tlyric?.lyric)) {
             this.elements.lyricLine.textContent = '暂无歌词';
+            this.elements.lyricTranslation.style.display = 'none';
+            this.elements.lyricLine.classList.remove('current', 'scrolling');
+            this.elements.lyricTranslation.classList.remove('current', 'scrolling');
             return;
         }
         const lrcLines = lyricData.lrc.lyric.split('\n');
