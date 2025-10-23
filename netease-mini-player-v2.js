@@ -40,8 +40,12 @@ class NeteaseMiniPlayer {
         const position = element.dataset.position || 'static';
         const validPositions = ['static', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
         const finalPosition = validPositions.includes(position) ? position : 'static';
+        
+        const embedValue = element.getAttribute('data-embed') || element.dataset.embed;
+        const isEmbed = embedValue === 'true' || embedValue === true;
+        
         return {
-            embed: element.dataset.embed === 'true',
+            embed: isEmbed,
             autoplay: element.dataset.autoplay === 'true',
             playlistId: element.dataset.playlistId,
             songId: element.dataset.songId,
@@ -57,6 +61,11 @@ class NeteaseMiniPlayer {
             this.element.setAttribute('data-embed', 'true');
         }
         this.element.setAttribute('data-position', this.config.position);
+        
+        if (this.config.embed) {
+            this.element.classList.add('netease-mini-player-embed');
+        }
+        
         this.initTheme();
         this.createPlayerHTML();
         this.bindEvents();
