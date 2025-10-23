@@ -704,7 +704,31 @@
 }
 
 .netease-mini-player[data-embed="true"] .list-btn {
-    display: none;
+    display: none !important;
+}
+
+.netease-mini-player[data-embed="true"] .minimize-btn {
+    display: none !important;
+}
+
+.netease-mini-player[data-embed="true"] .prev-btn,
+.netease-mini-player[data-embed="true"] .next-btn {
+    display: none !important;
+}
+
+.netease-mini-player[data-embed="true"] .playlist-container {
+    display: none !important;
+}
+
+.netease-mini-player-embed .list-btn,
+.netease-mini-player-embed .minimize-btn,
+.netease-mini-player-embed .prev-btn,
+.netease-mini-player-embed .next-btn {
+    display: none !important;
+}
+
+.netease-mini-player-embed .playlist-container {
+    display: none !important;
 }
 
 .playlist-container {
