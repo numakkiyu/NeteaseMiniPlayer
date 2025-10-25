@@ -89,8 +89,8 @@
 ```
 
 **下载文件：**
-- [📥 下载 CSS 文件](https://github.com/numakkiyu/NeteaseMiniPlayer/archive/refs/tags/v2.0.4.zip)
-- [📥 下载 JS 文件](https://api.hypcvgm.top/NeteaseMiniPlayer/download/NeteaseMiniPlayer-v2.0.3.zip)
+- [📥 从GitHub下载](https://github.com/numakkiyu/NeteaseMiniPlayer/archive/refs/tags/v2.0.4.zip)
+- [📥 使用CDN下载](https://api.hypcvgm.top/NeteaseMiniPlayer/download/NeteaseMiniPlayer-v2.0.3.zip)
 
 #### 🌐 CDN 引入
 
