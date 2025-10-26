@@ -9,6 +9,8 @@
 
 [🚀 快速开始](#-快速开始) • [📖 文档](#-配置选项) • [🎮 演示](#-使用示例) • [🛠️ API](#-api-参考)
 
+[English](README.en.md) • [简体中文](README.md) • [繁体中文](README.zh-Hant.md) 
+
 </div>
 
 > 注意：Netease Mini Player v1 版本过旧已弃用，不再提供维护，已归档
