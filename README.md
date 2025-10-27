@@ -11,6 +11,8 @@
 
 [English](README.en.md) • [简体中文](README.md) • [繁体中文](README.zh-Hant.md) 
 
+必看 [[NMP v2] NeteaseMiniPlayer v2 使用文档](https://docs.nmp.hypcvgm.top/) 
+
 </div>
 
 > 注意：Netease Mini Player v1 版本过旧已弃用，不再提供维护，已归档
