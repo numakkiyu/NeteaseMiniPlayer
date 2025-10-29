@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// ===== 全局音频管理器（防止多个实例同时播放）=====
 const GlobalAudioManager = {
     currentPlayer: null,
     setCurrent(player) {
