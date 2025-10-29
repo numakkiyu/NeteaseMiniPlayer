@@ -16,6 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// ===== 全局音频管理器（防止多个实例同时播放）=====
+const GlobalAudioManager = {
+    currentPlayer: null,
+    setCurrent(player) {
+        if (this.currentPlayer && this.currentPlayer !== player) {
+            this.currentPlayer.pause();
+        }
+        this.currentPlayer = player;
+    }
+};
 class NeteaseMiniPlayer {
     constructor(element) {
         this.element = element;
@@ -25,6 +35,7 @@ class NeteaseMiniPlayer {
         this.playlist = [];
         this.currentIndex = 0;
         this.audio = new Audio();
+        this.wasPlayingBeforeHidden = false;
         this.isPlaying = false;
         this.currentTime = 0;
         this.duration = 0;
@@ -234,6 +245,17 @@ class NeteaseMiniPlayer {
         });
         if (this.config.position !== 'static' && !this.config.embed) {
             this.setupDragAndDrop();
+        }
+        if (typeof document.hidden !== 'undefined') {
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && this.isPlaying) {
+                    this.wasPlayingBeforeHidden = true;
+                    this.pause();
+                } else if (!document.hidden && this.wasPlayingBeforeHidden) {
+                    this.play();
+                    this.wasPlayingBeforeHidden = false;
+                }
+            });
         }
     }
     setupAudioEvents() {
@@ -566,6 +588,7 @@ class NeteaseMiniPlayer {
         }
     }
     async play() {
+        GlobalAudioManager.setCurrent(this);
         try {
             await this.audio.play();
             this.isPlaying = true;
