@@ -302,7 +302,7 @@
 }
 
 .netease-mini-player[data-position="static"] {
-    position: static;
+    position: relative;
 }
 
 .player-main {
@@ -704,6 +704,10 @@
 }
 
 .netease-mini-player[data-embed="true"] .minimize-btn {
+    display: none !important;
+}
+
+.netease-mini-player[data-position="static"] .minimize-btn {
     display: none !important;
 }
 
