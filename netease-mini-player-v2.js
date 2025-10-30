@@ -50,6 +50,7 @@ class NeteaseMiniPlayer {
         const position = element.dataset.position || 'static';
         const validPositions = ['static', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
         const finalPosition = validPositions.includes(position) ? position : 'static';
+        const defaultMinimized = element.dataset.defaultMinimized === 'true';
         
         const embedValue = element.getAttribute('data-embed') || element.dataset.embed;
         const isEmbed = embedValue === 'true' || embedValue === true;
@@ -63,7 +64,8 @@ class NeteaseMiniPlayer {
             lyric: element.dataset.lyric !== 'false',
             theme: element.dataset.theme || 'auto',
             size: element.dataset.size || 'compact',
-            loop: element.dataset.loop || 'list'
+            loop: element.dataset.loop || 'list',
+            defaultMinimized: defaultMinimized
         };
     }
     async init() {
@@ -100,6 +102,9 @@ class NeteaseMiniPlayer {
                 if (this.config.autoplay && !this.config.embed) {
                     this.play();
                 }
+            }
+            if (this.config.defaultMinimized && !this.config.embed && this.config.position !== 'static') {
+                this.toggleMinimize();
             }
         } catch (error) {
             console.error('播放器初始化失败:', error);
