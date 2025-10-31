@@ -44,6 +44,8 @@ class NeteaseMiniPlayer {
         this.showLyrics = this.config.lyric;
         this.cache = new Map();
         this.init();
+        this.playMode = 'list';
+        this.shuffleHistory = [];
     }
     parseConfig() {
         const element = this.element;
@@ -64,7 +66,6 @@ class NeteaseMiniPlayer {
             lyric: element.dataset.lyric !== 'false',
             theme: element.dataset.theme || 'auto',
             size: element.dataset.size || 'compact',
-            loop: element.dataset.loop || 'list',
             defaultMinimized: defaultMinimized
         };
     }
@@ -157,6 +158,7 @@ class NeteaseMiniPlayer {
                         </div>
                     </div>
                     <button class="feature-btn lyrics-btn" title="显示/隐藏歌词">📝</button>
+                    ${!this.config.embed ? '<button class="feature-btn loop-mode-btn" title="列表循环">🔁</button>' : ''}
                     ${!this.config.embed ? '<button class="feature-btn list-btn" title="播放列表">☰</button>' : ''}
                     ${!this.config.embed ? '<button class="feature-btn minimize-btn" title="缩小/展开">⚪</button>' : ''}
                 </div>
@@ -192,6 +194,7 @@ class NeteaseMiniPlayer {
             playlistContent: this.element.querySelector('.playlist-content')
         };
         this.isMinimized = false;
+        this.elements.loopModeBtn = this.element.querySelector('.loop-mode-btn');
     }
     bindEvents() {
         this.elements.playBtn.addEventListener('click', () => this.togglePlay());
@@ -200,6 +203,9 @@ class NeteaseMiniPlayer {
         }
         if (this.elements.nextBtn) {
             this.elements.nextBtn.addEventListener('click', () => this.nextSong());
+        }
+        if (this.elements.loopModeBtn) {
+            this.elements.loopModeBtn.addEventListener('click', () => this.togglePlayMode());
         }
         this.elements.albumCoverContainer.addEventListener('click', () => {
             this.elements.albumCoverContainer.classList.toggle('expanded');
@@ -620,17 +626,40 @@ class NeteaseMiniPlayer {
         }
     }
     async nextSong() {
-        const wasPlaying = this.isPlaying;
+    const wasPlaying = this.isPlaying;
         if (this.playlist.length <= 1) {
-            if (this.config.loop === 'single') {
+            if (this.playMode === 'single') {
                 this.audio.currentTime = 0;
-                if (wasPlaying) {
-                    await this.play();
-                }
+                if (wasPlaying) await this.play();
                 return;
             }
+            this.audio.currentTime = 0;
+            if (wasPlaying) await this.play();
+            return;
         }
-        this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
+    
+        let newIndex;
+        if (this.playMode === 'shuffle') {
+            const availableIndices = this.playlist
+                .map((_, i) => i)
+                .filter(i => i !== this.currentIndex);
+            
+            if (availableIndices.length === 0) {
+                newIndex = this.currentIndex;
+            } else {
+                newIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+            }
+            this.shuffleHistory.push(this.currentIndex);
+            if (this.shuffleHistory.length > 2) {
+                this.shuffleHistory.shift();
+            }
+        } else if (this.playMode === 'single') {
+            newIndex = this.currentIndex;
+        } else {
+            newIndex = (this.currentIndex + 1) % this.playlist.length;
+        }
+    
+        this.currentIndex = newIndex;
         await this.loadCurrentSong();
         if (wasPlaying) {
             setTimeout(async () => {
@@ -723,6 +752,7 @@ class NeteaseMiniPlayer {
         const html = this.playlist.map((song, index) => `
             <div class="playlist-item ${index === this.currentIndex ? 'active' : ''}" data-index="${index}">
                 <div class="playlist-item-index">${(index + 1).toString().padStart(2, '0')}</div>
+                <img class="playlist-item-cover" src="${song.picUrl || ''}" alt="专辑封面">
                 <div class="playlist-item-info">
                     <div class="playlist-item-name">${song.name}</div>
                     <div class="playlist-item-artist">${song.artists}</div>
@@ -783,6 +813,19 @@ class NeteaseMiniPlayer {
             if (this.elements.listBtn) {
                 this.elements.listBtn.classList.remove('active');
             }
+        }
+    }
+    togglePlayMode() {
+        const modes = ['list', 'single', 'shuffle'];
+        const currentIndex = modes.indexOf(this.playMode);
+        this.playMode = modes[(currentIndex + 1) % 3];
+        
+        const icons = { list: '🔁', single: '🔂', shuffle: '🔀' };
+        const titles = { list: '列表循环', single: '单曲循环', shuffle: '随机播放' };
+        
+        if (this.elements.loopModeBtn) {
+            this.elements.loopModeBtn.textContent = icons[this.playMode];
+            this.elements.loopModeBtn.title = titles[this.playMode];
         }
     }
     toggleMinimize() {
