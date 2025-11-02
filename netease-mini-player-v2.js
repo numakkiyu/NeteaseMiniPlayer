@@ -208,7 +208,14 @@ class NeteaseMiniPlayer {
             this.elements.loopModeBtn.addEventListener('click', () => this.togglePlayMode());
         }
         this.elements.albumCoverContainer.addEventListener('click', () => {
-            this.elements.albumCoverContainer.classList.toggle('expanded');
+            if (this.element.classList.contains('minimized')) {
+                this.elements.albumCoverContainer.classList.toggle('expanded');
+                return;
+            }
+            if (this.currentSong && this.currentSong.id) {
+            const songUrl = `https://music.163.com/song?id=${this.currentSong.id}`;
+            window.open(songUrl, '_blank', 'noopener,noreferrer');
+            }
         });
         let isDragging = false;
         this.elements.progressContainer.addEventListener('mousedown', (e) => {
@@ -661,6 +668,9 @@ class NeteaseMiniPlayer {
     
         this.currentIndex = newIndex;
         await this.loadCurrentSong();
+        
+        this.updatePlaylistDisplay();
+        
         if (wasPlaying) {
             setTimeout(async () => {
                 try {
@@ -774,6 +784,10 @@ class NeteaseMiniPlayer {
                 }
             });
         });
+        const activeItem = this.elements.playlistContent.querySelector('.playlist-item.active');
+        if (activeItem) {
+            activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     }
     seekTo(e) {
         if (!this.elements.progressContainer || !this.audio) return;
