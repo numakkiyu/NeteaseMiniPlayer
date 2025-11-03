@@ -1,7 +1,7 @@
-NeteaseMiniPlayer
+NeteaseMiniPlayer v2 (NMP/NMPv2)
 Copyright 2025 BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）
 
-This product includes software developed by the NeteaseMiniPlayer project
+This product includes software developed by the NeteaseMiniPlayer v2 project
 (https://github.com/numakkiuyu/NeteaseMiniPlayer).
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,40 +21,24 @@ limitations under the License.
 This software contains the following third-party components:
 
 1. NeteaseCloudMusicApi
-   - Description: 网易云音乐 Node.js API service
+   - Description: 网易云音乐 Node.js API service (archived/not maintained)
    - License: MIT License
    - Copyright: Binaryify and contributors
    - Source: https://github.com/Binaryify/NeteaseCloudMusicApi
-
-2. Bootstrap (used in demo/documentation)
-   - Description: The most popular HTML, CSS, and JS library in the world
-   - License: MIT License
-   - Copyright: 2011-2023 The Bootstrap Authors
-   - Source: https://getbootstrap.com/
-
-3. Bootstrap Icons (used in demo/documentation)
-   - Description: Official open source SVG icon library for Bootstrap
-   - License: MIT License
-   - Copyright: 2019-2023 The Bootstrap Authors
-   - Source: https://icons.getbootstrap.com/
-
-4. Prism.js (used in demo/documentation)
-   - Description: Lightweight, extensible syntax highlighter
-   - License: MIT License
-   - Copyright: 2012 Lea Verou
-   - Source: https://prismjs.com/
+   - Note: This repository is no longer maintained as of 2024. See related news:
+     https://www.landiannews.com/archives/101953.html
+     https://www.ithome.com/0/746/942.htm
 
 ================================================================================
 
 ATTRIBUTION NOTICES:
 
-This project is built upon the NeteaseCloudMusicApi service, which provides
-access to NetEase Cloud Music's API endpoints. We acknowledge and thank the
-contributors of the NeteaseCloudMusicApi project for their excellent work.
+NeteaseMiniPlayer v2 (NMP/NMPv2) is a modern, lightweight music player application
+built with enhanced features and improved architecture compared to its predecessor.
 
-The demo and documentation pages utilize Bootstrap, Bootstrap Icons, and Prism.js
-for enhanced user interface and code highlighting functionality. We acknowledge
-and thank the respective maintainers and contributors of these projects.
+This project was originally built upon the NeteaseCloudMusicApi service, which
+provided access to NetEase Cloud Music's API endpoints. We acknowledge and thank
+the contributors of the NeteaseCloudMusicApi project for their excellent foundational work.
 
 ================================================================================
 
