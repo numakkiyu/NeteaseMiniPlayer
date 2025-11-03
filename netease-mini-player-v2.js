@@ -714,9 +714,28 @@ class NeteaseMiniPlayer {
             if (newIndex >= 0 && newIndex < this.lyrics.length) {
                 const lyric = this.lyrics[newIndex];
                 const lyricText = lyric.text || '♪';
-                this.elements.lyricLine.textContent = lyricText;
-                this.elements.lyricLine.classList.add('current');
-                this.checkLyricScrolling(this.elements.lyricLine, lyricText);
+            
+                this.elements.lyricLine.classList.remove('current');
+            
+                requestAnimationFrame(() => {
+                    this.elements.lyricLine.textContent = lyricText;
+                    this.checkLyricScrolling(this.elements.lyricLine, lyricText);
+            
+                    this.elements.lyricLine.classList.add('current');
+            
+                    if (lyric.translation) {
+                        this.elements.lyricTranslation.textContent = lyric.translation;
+                        this.elements.lyricTranslation.style.display = 'block';
+                        this.elements.lyricTranslation.classList.remove('current'); 
+                        requestAnimationFrame(() => {
+                            this.elements.lyricTranslation.classList.add('current'); 
+                        });
+                    } else {
+                        this.elements.lyricTranslation.style.display = 'none';
+                        this.elements.lyricTranslation.classList.remove('current', 'scrolling');
+                    }
+                });
+            
                 this.elements.lyricsContainer.classList.add('switching');
                 setTimeout(() => {
                     this.elements.lyricsContainer.classList.remove('switching');
@@ -1060,3 +1079,5 @@ if (typeof window !== 'undefined') {
         NeteaseMiniPlayer.init();
     }
 }
+
+console.log(["版本号 v2.0.9", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
