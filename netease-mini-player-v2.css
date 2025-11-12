@@ -1,6 +1,6 @@
 /**
- * 网易云音乐迷你播放器V2样式
- * 基于网易云音乐API的轻量级播放器组件
+ * [NMPv2] NeteaseMiniPlayer v2 CSS 
+ * Lightweight Player Component Based on NetEase Cloud Music API
  * 
  * Copyright 2025 BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）
  * 
@@ -31,6 +31,12 @@
     --border-radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --theme-transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+    --flow-color-1: rgba(255, 107, 53, 0.25);
+    --flow-color-2: rgba(86, 151, 227, 0.25);
+    --flow-color-3: rgba(255, 209, 102, 0.2);
+    --flow-opacity: 0.35;
+    --flow-speed: 12s;
 }
 
 .netease-mini-player[data-theme="dark"] {
@@ -45,6 +51,12 @@
     --shadow-dark: rgba(0, 0, 0, 0.4);
     --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
     --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+
+    --flow-color-1: rgba(255, 138, 80, 0.18);
+    --flow-color-2: rgba(86, 151, 227, 0.2);
+    --flow-color-3: rgba(140, 100, 255, 0.18);
+    --flow-opacity: 0.28;
+    --flow-speed: 14s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,6 +72,12 @@
         --shadow-dark: rgba(0, 0, 0, 0.4);
         --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
         --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+
+        --flow-color-1: rgba(255, 138, 80, 0.18);
+        --flow-color-2: rgba(86, 151, 227, 0.2);
+        --flow-color-3: rgba(140, 100, 255, 0.18);
+        --flow-opacity: 0.28;
+        --flow-speed: 14s;
     }
 }
 @media (prefers-color-scheme: light) {
@@ -75,6 +93,12 @@
         --shadow-dark: rgba(0, 0, 0, 0.1);
         --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
         --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+
+        --flow-color-1: rgba(255, 107, 53, 0.25);
+        --flow-color-2: rgba(86, 151, 227, 0.25);
+        --flow-color-3: rgba(255, 209, 102, 0.2);
+        --flow-opacity: 0.35;
+        --flow-speed: 12s;
     }
 }
 
@@ -100,6 +124,47 @@
         var(--theme-transition);
         background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.netease-mini-player::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 15% 20%, var(--flow-color-1) 0%, transparent 60%),
+        radial-gradient(circle at 80% 25%, var(--flow-color-2) 0%, transparent 60%),
+        radial-gradient(circle at 30% 85%, var(--flow-color-3) 0%, transparent 60%);
+    opacity: var(--flow-opacity);
+    background-size: 200% 200%, 200% 200%, 200% 200%;
+    background-position: 0% 0%, 100% 0%, 0% 100%;
+    filter: saturate(1) brightness(1);
+    transform: scale(1);
+    animation: flow-breathe var(--flow-speed) ease-in-out infinite;
+    animation-play-state: paused;
+}
+
+.netease-mini-player.player-playing::before {
+    animation-play-state: running;
+}
+
+@keyframes flow-breathe {
+    0% {
+        background-position: 0% 0%, 100% 0%, 0% 100%;
+        transform: scale(1);
+        filter: saturate(1) brightness(1);
+    }
+    50% {
+        background-position: 100% 50%, 0% 100%, 50% 0%;
+        transform: scale(1.02);
+        filter: saturate(1.08) brightness(1.03);
+    }
+    100% {
+        background-position: 0% 100%, 100% 50%, 100% 0%;
+        transform: scale(1);
+        filter: saturate(1) brightness(1);
+    }
 }
 
 .netease-mini-player.minimized {
@@ -957,4 +1022,30 @@
     transform: scale(0.95);
     z-index: 9999;
     transition: none;
+}
+
+.netease-mini-player {
+    opacity: 1;
+}
+
+.netease-mini-player.idle {
+    opacity: 0.5;
+}
+
+.netease-mini-player.fading-out {
+    animation: player-fade-out var(--opacity-duration-down, 0.6s) var(--opacity-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+}
+
+.netease-mini-player.fading-in {
+    animation: player-fade-in var(--opacity-duration-up, 0.25s) var(--opacity-ease-in, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
+}
+
+@keyframes player-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0.5; }
+}
+
+@keyframes player-fade-in {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
 }
