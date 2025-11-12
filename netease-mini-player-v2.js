@@ -1,8 +1,8 @@
 /**
- * 网易云音乐迷你播放器V2
- * 基于网易云音乐API的轻量级播放器组件
+ * [NMPv2] NeteaseMiniPlayer v2 JavaScript
+ * Lightweight Player Component Based on NetEase Cloud Music API
  * 
- * Copyright 22025 BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）
+ * Copyright 2025 BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,9 @@ class NeteaseMiniPlayer {
         this.init();
         this.playMode = 'list';
         this.shuffleHistory = [];
+        this.idleTimeout = null;
+        this.idleDelay = 5000;
+        this.isIdle = false;
     }
     parseConfig() {
         const element = this.element;
@@ -273,6 +276,71 @@ class NeteaseMiniPlayer {
                     this.wasPlayingBeforeHidden = false;
                 }
             });
+        }
+
+        this.element.addEventListener('mouseenter', () => {
+            this.restoreOpacity();
+        });
+        this.element.addEventListener('mouseleave', () => {
+            this.startIdleTimer();
+        });
+        this.applyIdlePolicyOnInit();
+        if (this.shouldEnableIdleOpacity()) {
+            this.startIdleTimer();
+        }
+    }
+
+    startIdleTimer() {
+        this.clearIdleTimer();
+        if (!this.shouldEnableIdleOpacity()) return;
+        this.idleTimeout = setTimeout(() => {
+            this.triggerFadeOut();
+        }, this.idleDelay);
+    }
+
+    clearIdleTimer() {
+        if (this.idleTimeout) {
+            clearTimeout(this.idleTimeout);
+            this.idleTimeout = null;
+        }
+    }
+
+    triggerFadeOut() {
+        if (!this.shouldEnableIdleOpacity()) return;
+        if (this.isIdle) return;
+        this.isIdle = true;
+        this.element.classList.remove('fading-in');
+        this.element.classList.add('fading-out');
+        const onEnd = () => {
+            this.element.classList.remove('fading-out');
+            this.element.classList.add('idle');
+            this.element.removeEventListener('animationend', onEnd);
+        };
+        this.element.addEventListener('animationend', onEnd);
+    }
+
+    restoreOpacity() {
+        this.clearIdleTimer();
+        if (!this.isIdle) return;
+        this.isIdle = false;
+        this.element.classList.remove('idle', 'fading-out');
+        this.element.classList.add('fading-in');
+        const onEndIn = () => {
+            this.element.classList.remove('fading-in');
+            this.element.removeEventListener('animationend', onEndIn);
+        };
+        this.element.addEventListener('animationend', onEndIn);
+    }
+
+    shouldEnableIdleOpacity() {
+        return !this.config.embed && this.config.position !== 'static';
+    }
+
+    applyIdlePolicyOnInit() {
+        if (!this.shouldEnableIdleOpacity()) {
+            this.clearIdleTimer();
+            this.isIdle = false;
+            this.element.classList.remove('idle', 'fading-in', 'fading-out');
         }
     }
     setupAudioEvents() {
@@ -612,6 +680,7 @@ class NeteaseMiniPlayer {
             this.elements.playIcon.style.display = 'none';
             this.elements.pauseIcon.style.display = 'inline';
             this.elements.albumCover.classList.add('playing');
+            this.element.classList.add('player-playing');
         } catch (error) {
             console.error('播放失败:', error);
             this.showError('播放失败');
@@ -623,6 +692,7 @@ class NeteaseMiniPlayer {
         this.elements.playIcon.style.display = 'inline';
         this.elements.pauseIcon.style.display = 'none';
         this.elements.albumCover.classList.remove('playing');
+        this.element.classList.remove('player-playing');
     }
     async previousSong() {
         if (this.playlist.length <= 1) return;
@@ -1080,4 +1150,4 @@ if (typeof window !== 'undefined') {
     }
 }
 
-console.log(["版本号 v2.0.9", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
+console.log(["版本号 v2.0.10", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
