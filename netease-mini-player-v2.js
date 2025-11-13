@@ -59,7 +59,7 @@ class NeteaseMiniPlayer {
         
         const embedValue = element.getAttribute('data-embed') || element.dataset.embed;
         const isEmbed = embedValue === 'true' || embedValue === true;
-        
+
         return {
             embed: isEmbed,
             autoplay: element.dataset.autoplay === 'true',
@@ -285,9 +285,6 @@ class NeteaseMiniPlayer {
             this.startIdleTimer();
         });
         this.applyIdlePolicyOnInit();
-        if (this.shouldEnableIdleOpacity()) {
-            this.startIdleTimer();
-        }
     }
 
     startIdleTimer() {
@@ -333,7 +330,7 @@ class NeteaseMiniPlayer {
     }
 
     shouldEnableIdleOpacity() {
-        return !this.config.embed && this.config.position !== 'static';
+        return this.isMinimized === true;
     }
 
     applyIdlePolicyOnInit() {
@@ -941,6 +938,10 @@ class NeteaseMiniPlayer {
                 this.elements.minimizeBtn.classList.add('active');
                 this.elements.minimizeBtn.title = '展开';
             }
+            this.clearIdleTimer();
+            this.isIdle = false;
+            this.element.classList.remove('idle', 'fading-in', 'fading-out');
+            this.startIdleTimer();
         } else {
             this.element.classList.remove('minimized');
             this.isMinimized = false;
@@ -948,6 +949,13 @@ class NeteaseMiniPlayer {
                 this.elements.minimizeBtn.classList.remove('active');
                 this.elements.minimizeBtn.title = '缩小';
             }
+            this.clearIdleTimer();
+            if (this.isIdle) {
+                this.restoreOpacity();
+            } else {
+                this.element.classList.remove('idle', 'fading-in', 'fading-out');
+            }
+            this.isIdle = false;
         }
     }
     determinePlaylistDirection() {
@@ -1150,4 +1158,4 @@ if (typeof window !== 'undefined') {
     }
 }
 
-console.log(["版本号 v2.0.10", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
+console.log(["版本号 v2.0.10.1", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
