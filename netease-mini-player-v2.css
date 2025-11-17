@@ -21,6 +21,9 @@
     --secondary-bg: #f0f0f0;
     --bg-color: #fafafa;
     --accent-color: #FF6B35;
+    --accent-color-2: #7A66FF;
+    --accent-color-3: #00C2FF;
+    --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 50%, var(--accent-color-3) 100%);
     --text-primary: #333333;
     --text-secondary: #666666;
     --text-muted: #999999;
@@ -32,11 +35,15 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --theme-transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 
-    --flow-color-1: rgba(255, 107, 53, 0.25);
-    --flow-color-2: rgba(86, 151, 227, 0.25);
-    --flow-color-3: rgba(255, 209, 102, 0.2);
-    --flow-opacity: 0.35;
-    --flow-speed: 12s;
+    --flow-color-1: rgba(255, 107, 53, 0.32); 
+    --flow-color-2: rgba(86, 151, 227, 0.26); 
+    --flow-color-3: rgba(255, 209, 102, 0.26);
+    --flow-color-4: rgba(122, 102, 255, 0.28);
+    --flow-color-5: rgba(0, 194, 255, 0.22);
+    --flow-opacity: 0.45;
+    --flow-speed: 10s;
+    --volume-total-width: 60px; 
+    --playlist-flow-opacity: 0.25;
 }
 
 .netease-mini-player[data-theme="dark"] {
@@ -44,6 +51,9 @@
     --secondary-bg: #2a2a2a;
     --bg-color: #1e1e1e;
     --accent-color: #FF8A50;
+    --accent-color-2: #6C63FF;
+    --accent-color-3: #00D4FF;
+    --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 50%, var(--accent-color-3) 100%);
     --text-primary: #e0e0e0;
     --text-secondary: #b0b0b0;
     --text-muted: #808080;
@@ -52,11 +62,13 @@
     --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
     --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
 
-    --flow-color-1: rgba(255, 138, 80, 0.18);
-    --flow-color-2: rgba(86, 151, 227, 0.2);
-    --flow-color-3: rgba(140, 100, 255, 0.18);
-    --flow-opacity: 0.28;
-    --flow-speed: 14s;
+    --flow-color-1: rgba(255, 138, 80, 0.28);
+    --flow-color-2: rgba(86, 151, 227, 0.24);
+    --flow-color-3: rgba(140, 100, 255, 0.26);
+    --flow-color-4: rgba(124, 110, 255, 0.24);
+    --flow-color-5: rgba(0, 212, 255, 0.22);
+    --flow-opacity: 0.36;
+    --flow-speed: 12s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -65,6 +77,9 @@
         --secondary-bg: #2a2a2a;
         --bg-color: #1e1e1e;
         --accent-color: #FF8A50;
+        --accent-color-2: #6C63FF;
+        --accent-color-3: #00D4FF;
+        --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 50%, var(--accent-color-3) 100%);
         --text-primary: #e0e0e0;
         --text-secondary: #b0b0b0;
         --text-muted: #808080;
@@ -73,11 +88,13 @@
         --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
         --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
 
-        --flow-color-1: rgba(255, 138, 80, 0.18);
-        --flow-color-2: rgba(86, 151, 227, 0.2);
-        --flow-color-3: rgba(140, 100, 255, 0.18);
-        --flow-opacity: 0.28;
-        --flow-speed: 14s;
+        --flow-color-1: rgba(255, 138, 80, 0.28);
+        --flow-color-2: rgba(86, 151, 227, 0.24);
+        --flow-color-3: rgba(140, 100, 255, 0.26);
+        --flow-color-4: rgba(124, 110, 255, 0.24);
+        --flow-color-5: rgba(0, 212, 255, 0.22);
+        --flow-opacity: 0.36;
+        --flow-speed: 12s;
     }
 }
 @media (prefers-color-scheme: light) {
@@ -86,6 +103,9 @@
         --secondary-bg: #f0f0f0;
         --bg-color: #fafafa;
         --accent-color: #FF6B35;
+        --accent-color-2: #7A66FF;
+        --accent-color-3: #00C2FF;
+        --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 50%, var(--accent-color-3) 100%);
         --text-primary: #333333;
         --text-secondary: #666666;
         --text-muted: #999999;
@@ -94,11 +114,13 @@
         --shadow-inset: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
         --shadow-outset: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
 
-        --flow-color-1: rgba(255, 107, 53, 0.25);
-        --flow-color-2: rgba(86, 151, 227, 0.25);
-        --flow-color-3: rgba(255, 209, 102, 0.2);
-        --flow-opacity: 0.35;
-        --flow-speed: 12s;
+        --flow-color-1: rgba(255, 107, 53, 0.32);
+        --flow-color-2: rgba(86, 151, 227, 0.26);
+        --flow-color-3: rgba(255, 209, 102, 0.26);
+        --flow-color-4: rgba(122, 102, 255, 0.28);
+        --flow-color-5: rgba(0, 194, 255, 0.22);
+        --flow-opacity: 0.45;
+        --flow-speed: 10s;
     }
 }
 
@@ -122,7 +144,7 @@
         border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1),
         padding 0.5s cubic-bezier(0.4, 0, 0.2, 1),
         var(--theme-transition);
-        background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+        background: 0.5s cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -135,11 +157,13 @@
     background:
         radial-gradient(circle at 15% 20%, var(--flow-color-1) 0%, transparent 60%),
         radial-gradient(circle at 80% 25%, var(--flow-color-2) 0%, transparent 60%),
-        radial-gradient(circle at 30% 85%, var(--flow-color-3) 0%, transparent 60%);
+        radial-gradient(circle at 30% 85%, var(--flow-color-3) 0%, transparent 60%),
+        radial-gradient(circle at 10% 75%, var(--flow-color-4) 0%, transparent 55%),
+        radial-gradient(circle at 85% 80%, var(--flow-color-5) 0%, transparent 55%);
     opacity: var(--flow-opacity);
-    background-size: 200% 200%, 200% 200%, 200% 200%;
-    background-position: 0% 0%, 100% 0%, 0% 100%;
-    filter: saturate(1) brightness(1);
+    background-size: 220% 220%, 220% 220%, 220% 220%, 220% 220%, 220% 220%;
+    background-position: 0% 0%, 100% 0%, 0% 100%, 20% 80%, 80% 20%;
+    filter: saturate(1.02) brightness(1.01);
     transform: scale(1);
     animation: flow-breathe var(--flow-speed) ease-in-out infinite;
     animation-play-state: paused;
@@ -151,19 +175,19 @@
 
 @keyframes flow-breathe {
     0% {
-        background-position: 0% 0%, 100% 0%, 0% 100%;
+        background-position: 0% 0%, 100% 0%, 0% 100%, 20% 80%, 80% 20%;
         transform: scale(1);
-        filter: saturate(1) brightness(1);
+        filter: saturate(1.02) brightness(1.01);
     }
     50% {
-        background-position: 100% 50%, 0% 100%, 50% 0%;
-        transform: scale(1.02);
-        filter: saturate(1.08) brightness(1.03);
+        background-position: 100% 50%, 0% 100%, 50% 0%, 35% 65%, 65% 35%;
+        transform: scale(1.03);
+        filter: saturate(1.15) brightness(1.06);
     }
     100% {
-        background-position: 0% 100%, 100% 50%, 100% 0%;
+        background-position: 0% 100%, 100% 50%, 100% 0%, 20% 80%, 80% 20%;
         transform: scale(1);
-        filter: saturate(1) brightness(1);
+        filter: saturate(1.02) brightness(1.01);
     }
 }
 
@@ -172,12 +196,13 @@
     height: 80px;
     border-radius: 50%;
     padding: 0;
-    background: #1a1a1a;
+    background: radial-gradient(120px 120px at 30% 30%, rgba(255, 138, 80, 0.25), transparent 60%),
+                radial-gradient(120px 120px at 70% 70%, rgba(0, 210, 255, 0.22), transparent 60%),
+                linear-gradient(135deg, #151515, #1e1e1e);
     box-shadow: 
         4px 4px 12px rgba(0, 0, 0, 0.4),
         -2px -2px 8px rgba(255, 255, 255, 0.1),
         inset 0 0 20px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
 }
 
 .netease-mini-player.minimized .song-content,
@@ -363,6 +388,16 @@
     overflow: hidden;
     cursor: pointer;
     border: 2px solid rgba(0, 0, 0, 0.1);
+}
+.album-cover-container::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: conic-gradient(from 0deg, var(--accent-color), var(--accent-color-2), var(--accent-color-3), var(--accent-color));
+    opacity: 0.18;
+    filter: blur(6px) saturate(1.05);
 }
 
 .album-cover {
@@ -601,7 +636,7 @@
     box-shadow: 
         inset 2px 2px 4px var(--shadow-dark),
         inset -2px -2px 4px var(--shadow-light);
-    background: var(--accent-color);
+    background: var(--accent-gradient);
     color: white;
 }
 
@@ -655,7 +690,7 @@
     align-items: center;
     gap: 6px;
     flex: 1;
-    max-width: 60%;
+    max-width: var(--progress-max, 60%);
 }
 
 .netease-mini-player[data-embed="true"] .progress-container {
@@ -685,7 +720,7 @@
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-color), #FF8A50);
+    background: var(--accent-gradient);
     border-radius: 2px;
     width: 0%;
     transition: width 0.1s ease;
@@ -699,10 +734,11 @@
     top: 50%;
     width: 8px;
     height: 8px;
-    background: var(--accent-color);
+    background: var(--accent-color-3);
     border-radius: 50%;
     transform: translateY(-50%);
     box-shadow: 
+        0 0 8px rgba(0, 210, 255, 0.6),
         1px 1px 2px var(--shadow-dark),
         -1px -1px 2px var(--shadow-light);
 }
@@ -747,6 +783,44 @@
     border-radius: 2px;
     width: 70%;
     transition: width 0.1s ease;
+}
+
+.sr-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    padding: 0 !important;
+}
+
+.netease-mini-player.mobile-env .volume-container {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+.netease-mini-player.mobile-env .progress-container {
+    --progress-max: calc(60% + var(--volume-total-width, 60px));
+}
+.netease-mini-player.mobile-env[data-embed="true"] .progress-container {
+    max-width: calc(100% - 60px + var(--volume-total-width, 60px));
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .netease-mini-player.mobile-env .bottom-controls { gap: 10px; }
 }
 
 .feature-btn {
@@ -815,13 +889,38 @@
         4px 4px 8px var(--shadow-dark),
         -4px -4px 8px var(--shadow-light);
     max-height: 200px;
-    overflow: visible;
+    overflow: hidden;
     z-index: 1001;
     opacity: 0;
     transform: translateY(-10px);
     visibility: hidden;
     transition: all 0.3s ease;
     margin-top: 8px;
+}
+
+.playlist-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 15%, var(--flow-color-1) 0%, transparent 60%),
+        radial-gradient(circle at 75% 30%, var(--flow-color-2) 0%, transparent 55%),
+        radial-gradient(circle at 35% 85%, var(--flow-color-3) 0%, transparent 55%),
+        radial-gradient(circle at 25% 70%, var(--flow-color-4) 0%, transparent 50%),
+        radial-gradient(circle at 85% 75%, var(--flow-color-5) 0%, transparent 50%);
+    opacity: var(--playlist-flow-opacity);
+    background-size: 220% 220%, 220% 220%, 220% 220%, 220% 220%, 220% 220%;
+    background-position: 0% 0%, 100% 0%, 0% 100%, 20% 80%, 80% 20%;
+    filter: saturate(1.02) brightness(1.01);
+    transform: scale(1);
+    animation: flow-breathe var(--flow-speed) ease-in-out infinite;
+    animation-play-state: paused;
+}
+
+.netease-mini-player.player-playing .playlist-container::before {
+    animation-play-state: running;
 }
 
 .playlist-container.expand-up {
@@ -1028,24 +1127,50 @@
     opacity: 1;
 }
 
-.netease-mini-player.idle {
-    opacity: 0.5;
+.netease-mini-player.minimized.idle {
+    opacity: 0.7;
 }
 
-.netease-mini-player.fading-out {
+.netease-mini-player.minimized.fading-out {
     animation: player-fade-out var(--opacity-duration-down, 0.6s) var(--opacity-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
-.netease-mini-player.fading-in {
+.netease-mini-player.minimized.fading-in {
     animation: player-fade-in var(--opacity-duration-up, 0.25s) var(--opacity-ease-in, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
 }
 
 @keyframes player-fade-out {
     from { opacity: 1; }
-    to { opacity: 0.5; }
+    to { opacity: 0.7; }
 }
 
 @keyframes player-fade-in {
-    from { opacity: 0.5; }
+    from { opacity: 0.7; }
     to { opacity: 1; }
 }
+
+.netease-mini-player.minimized.docked-right { transform: translateX(calc(50% + var(--dock-gap, 20px))); }
+.netease-mini-player.minimized.docked-left { transform: translateX(calc(-50% - var(--dock-gap, 20px))); }
+
+.netease-mini-player.minimized.fading-out.docked-right {
+    animation: 
+        player-fade-out var(--opacity-duration-down, 0.6s) var(--opacity-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards,
+        player-dock-right var(--dock-duration, 0.45s) var(--dock-ease-out, cubic-bezier(0.18, 0.9, 0.2, 1.0)) forwards;
+}
+.netease-mini-player.minimized.fading-out.docked-left {
+    animation: 
+        player-fade-out var(--opacity-duration-down, 0.6s) var(--opacity-ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards,
+        player-dock-left var(--dock-duration, 0.45s) var(--dock-ease-out, cubic-bezier(0.18, 0.9, 0.2, 1.0)) forwards;
+}
+
+.netease-mini-player.minimized.popping-right {
+    animation: player-popout-right var(--popout-duration, 0.28s) var(--popout-ease, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
+}
+.netease-mini-player.minimized.popping-left {
+    animation: player-popout-left var(--popout-duration, 0.28s) var(--popout-ease, cubic-bezier(0.4, 0, 0.2, 1)) forwards;
+}
+
+@keyframes player-dock-right { from { transform: translateX(0); } to { transform: translateX(calc(50% + var(--dock-gap, 20px))); } }
+@keyframes player-dock-left { from { transform: translateX(0); } to { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } }
+@keyframes player-popout-right { from { transform: translateX(calc(50% + var(--dock-gap, 20px))); } to { transform: translateX(0); } }
+@keyframes player-popout-left { from { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } to { transform: translateX(0); } }
