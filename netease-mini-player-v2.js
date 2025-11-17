@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+(()=>{try{const s=document.currentScript;if(s&&s.src){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
 const GlobalAudioManager = {
     currentPlayer: null,
     setCurrent(player) {
@@ -46,7 +47,10 @@ class NeteaseMiniPlayer {
         this.init();
         this.playMode = 'list';
         this.shuffleHistory = [];
+
+        // 闲置透明度控制
         this.idleTimeout = null;
+        // 缩小为黑胶唱片状态下，未触碰 5 秒后降低透明度到 70%
         this.idleDelay = 5000;
         this.isIdle = false;
     }
@@ -84,6 +88,9 @@ class NeteaseMiniPlayer {
         
         this.initTheme();
         this.createPlayerHTML();
+        // 移动端环境响应：隐藏音量、扩展进度条
+        this.applyResponsiveControls?.();
+        this.setupEnvListeners?.();
         this.bindEvents();
         this.setupAudioEvents();
         try {
@@ -187,6 +194,7 @@ class NeteaseMiniPlayer {
             progressBar: this.element.querySelector('.progress-bar'),
             currentTime: this.element.querySelector('.current-time'),
             totalTime: this.element.querySelector('.total-time'),
+            volumeContainer: this.element.querySelector('.volume-container'),
             volumeSlider: this.element.querySelector('.volume-slider'),
             volumeBar: this.element.querySelector('.volume-bar'),
             volumeIcon: this.element.querySelector('.volume-icon'),
@@ -278,15 +286,19 @@ class NeteaseMiniPlayer {
             });
         }
 
+        // 透明度闲置管理：鼠标悬停立即恢复，不悬停5秒后降至50%
         this.element.addEventListener('mouseenter', () => {
             this.restoreOpacity();
         });
         this.element.addEventListener('mouseleave', () => {
             this.startIdleTimer();
         });
+        // 根据配置应用闲置透明度策略
         this.applyIdlePolicyOnInit();
+        // 初始化不降低透明度；仅在进入缩小模式后才开始计时
     }
 
+    // 开始闲置计时
     startIdleTimer() {
         this.clearIdleTimer();
         if (!this.shouldEnableIdleOpacity()) return;
@@ -295,6 +307,7 @@ class NeteaseMiniPlayer {
         }, this.idleDelay);
     }
 
+    // 清理闲置计时
     clearIdleTimer() {
         if (this.idleTimeout) {
             clearTimeout(this.idleTimeout);
@@ -302,13 +315,19 @@ class NeteaseMiniPlayer {
         }
     }
 
+    // 执行降低透明度的非线性动画，动画结束维持idle状态
     triggerFadeOut() {
         if (!this.shouldEnableIdleOpacity()) return;
         if (this.isIdle) return;
         this.isIdle = true;
         this.element.classList.remove('fading-in');
+        const side = this.getDockSide();
+        if (side) {
+            this.element.classList.add(`docked-${side}`);
+        }
         this.element.classList.add('fading-out');
-        const onEnd = () => {
+        const onEnd = (e) => {
+            if (e.animationName !== 'player-fade-out') return;
             this.element.classList.remove('fading-out');
             this.element.classList.add('idle');
             this.element.removeEventListener('animationend', onEnd);
@@ -316,29 +335,132 @@ class NeteaseMiniPlayer {
         this.element.addEventListener('animationend', onEnd);
     }
 
+    // 恢复透明度的非线性动画，动画结束清理状态
     restoreOpacity() {
         this.clearIdleTimer();
+        const side = this.getDockSide();
+        const hasDock = side ? this.element.classList.contains(`docked-${side}`) : false;
+        if (hasDock) {
+            const popAnim = side === 'right' ? 'player-popout-right' : 'player-popout-left';
+            this.element.classList.add(`popping-${side}`);
+            const onPopEnd = (e) => {
+                if (e.animationName !== popAnim) return;
+                this.element.removeEventListener('animationend', onPopEnd);
+                this.element.classList.remove(`popping-${side}`);
+                this.element.classList.remove(`docked-${side}`);
+                // 然后恢复不透明
+                if (this.isIdle) {
+                    this.isIdle = false;
+                }
+                this.element.classList.remove('idle', 'fading-out');
+                this.element.classList.add('fading-in');
+                const onEndIn = (ev) => {
+                    if (ev.animationName !== 'player-fade-in') return;
+                    this.element.classList.remove('fading-in');
+                    this.element.removeEventListener('animationend', onEndIn);
+                };
+                this.element.addEventListener('animationend', onEndIn);
+            };
+            this.element.addEventListener('animationend', onPopEnd);
+            return;
+        }
         if (!this.isIdle) return;
         this.isIdle = false;
         this.element.classList.remove('idle', 'fading-out');
         this.element.classList.add('fading-in');
-        const onEndIn = () => {
+        const onEndIn = (ev) => {
+            if (ev.animationName !== 'player-fade-in') return;
             this.element.classList.remove('fading-in');
             this.element.removeEventListener('animationend', onEndIn);
         };
         this.element.addEventListener('animationend', onEndIn);
     }
 
+    // 是否启用闲置透明度（嵌入模式或静态位置下禁用）
     shouldEnableIdleOpacity() {
+        // 仅在缩小为黑胶唱片状态时启用
         return this.isMinimized === true;
     }
 
+    // 初始化时应用闲置透明度策略：禁用时保持不透明并清理类名
     applyIdlePolicyOnInit() {
         if (!this.shouldEnableIdleOpacity()) {
             this.clearIdleTimer();
             this.isIdle = false;
-            this.element.classList.remove('idle', 'fading-in', 'fading-out');
+            this.element.classList.remove('idle', 'fading-in', 'fading-out', 'docked-left', 'docked-right', 'popping-left', 'popping-right');
         }
+    }
+    // 根据固定位置判定吸附方向（默认右侧）
+    getDockSide() {
+        const pos = this.config.position;
+        if (pos === 'top-left' || pos === 'bottom-left') return 'left';
+        if (pos === 'top-right' || pos === 'bottom-right') return 'right';
+        return 'right';
+    }
+    // UA 检测与缓存（移动端/iOS/Android/HarmonyOS，内置浏览器、PWA、iPad）
+    static getUAInfo() {
+        if (NeteaseMiniPlayer._uaCache) return NeteaseMiniPlayer._uaCache;
+        const nav = typeof navigator !== 'undefined' ? navigator : {};
+        const uaRaw = (nav.userAgent || '');
+        const ua = uaRaw.toLowerCase();
+        const platform = (nav.platform || '').toLowerCase();
+        const maxTP = nav.maxTouchPoints || 0;
+        const isWeChat = /micromessenger/.test(ua);
+        const isQQ = /(mqqbrowser| qq)/.test(ua);
+        const isInAppWebView = /\bwv\b|; wv/.test(ua) || /version\/\d+.*chrome/.test(ua);
+        const isiPhone = /iphone/.test(ua);
+        const isiPadUA = /ipad/.test(ua);
+        const isIOSLikePad = !isiPadUA && platform.includes('mac') && maxTP > 1; // iPadOS Safari
+        const isiOS = isiPhone || isiPadUA || isIOSLikePad;
+        const isAndroid = /android/.test(ua);
+        const isHarmonyOS = /harmonyos/.test(uaRaw) || /huawei|honor/.test(ua); // 宽松匹配
+        const isMobileToken = /mobile/.test(ua) || /sm-|mi |redmi|huawei|honor|oppo|vivo|oneplus/.test(ua);
+        const isHarmonyDesktop = isHarmonyOS && !isMobileToken && !isAndroid && !isiOS;
+        const isPWA = (typeof window !== 'undefined' && (
+            (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+            (nav.standalone === true)
+        )) || false;
+        const isMobile = (isiOS || isAndroid || (isHarmonyOS && !isHarmonyDesktop) || isMobileToken || isInAppWebView);
+        const info = { isMobile, isiOS, isAndroid, isHarmonyOS, isHarmonyDesktop, isWeChat, isQQ, isInAppWebView, isPWA, isiPad: isiPadUA || isIOSLikePad };
+        NeteaseMiniPlayer._uaCache = info;
+        return info;
+    }
+    applyResponsiveControls() {
+        const env = NeteaseMiniPlayer.getUAInfo();
+        const shouldHideVolume = !!env.isMobile;
+        this.element.classList.toggle('mobile-env', shouldHideVolume);
+        if (this.elements && this.elements.volumeContainer == null) {
+            this.elements.volumeContainer = this.element.querySelector('.volume-container');
+        }
+        if (this.elements.volumeContainer) {
+            if (shouldHideVolume) {
+                this.elements.volumeContainer.classList.add('sr-visually-hidden');
+                this.elements.volumeContainer.setAttribute('aria-hidden', 'false');
+                this.elements.volumeSlider?.setAttribute('aria-label', '音量控制（移动端隐藏，仅无障碍可见）');
+            } else {
+                this.elements.volumeContainer.classList.remove('sr-visually-hidden');
+                this.elements.volumeContainer.removeAttribute('aria-hidden');
+                this.elements.volumeSlider?.removeAttribute('aria-label');
+            }
+        }
+    }
+    setupEnvListeners() {
+        const reapply = () => this.applyResponsiveControls();
+        if (window.matchMedia) {
+            try {
+                const mq1 = window.matchMedia('(orientation: portrait)');
+                const mq2 = window.matchMedia('(orientation: landscape)');
+                mq1.addEventListener?.('change', reapply);
+                mq2.addEventListener?.('change', reapply);
+            } catch (e) {
+                // 某些浏览器不支持 addEventListener on MediaQueryList
+                mq1.onchange = reapply;
+                mq2.onchange = reapply;
+            }
+        } else {
+            window.addEventListener('orientationchange', reapply);
+        }
+        window.addEventListener('resize', reapply);
     }
     setupAudioEvents() {
         this.audio.addEventListener('loadedmetadata', () => {
@@ -677,6 +799,7 @@ class NeteaseMiniPlayer {
             this.elements.playIcon.style.display = 'none';
             this.elements.pauseIcon.style.display = 'inline';
             this.elements.albumCover.classList.add('playing');
+            // 播放时启用容器呼吸动画
             this.element.classList.add('player-playing');
         } catch (error) {
             console.error('播放失败:', error);
@@ -689,6 +812,7 @@ class NeteaseMiniPlayer {
         this.elements.playIcon.style.display = 'inline';
         this.elements.pauseIcon.style.display = 'none';
         this.elements.albumCover.classList.remove('playing');
+        // 暂停时停止容器呼吸动画
         this.element.classList.remove('player-playing');
     }
     async previousSong() {
@@ -938,9 +1062,10 @@ class NeteaseMiniPlayer {
                 this.elements.minimizeBtn.classList.add('active');
                 this.elements.minimizeBtn.title = '展开';
             }
+            // 进入最小化：开始闲置计时（5秒后降至70%）
             this.clearIdleTimer();
             this.isIdle = false;
-            this.element.classList.remove('idle', 'fading-in', 'fading-out');
+            this.element.classList.remove('idle', 'fading-in', 'fading-out', 'docked-left', 'docked-right', 'popping-left', 'popping-right');
             this.startIdleTimer();
         } else {
             this.element.classList.remove('minimized');
@@ -949,11 +1074,12 @@ class NeteaseMiniPlayer {
                 this.elements.minimizeBtn.classList.remove('active');
                 this.elements.minimizeBtn.title = '缩小';
             }
+            // 退出最小化：清理计时并恢复不透明
             this.clearIdleTimer();
             if (this.isIdle) {
                 this.restoreOpacity();
             } else {
-                this.element.classList.remove('idle', 'fading-in', 'fading-out');
+                this.element.classList.remove('idle', 'fading-in', 'fading-out', 'docked-left', 'docked-right', 'popping-left', 'popping-right');
             }
             this.isIdle = false;
         }
@@ -1158,4 +1284,4 @@ if (typeof window !== 'undefined') {
     }
 }
 
-console.log(["版本号 v2.0.10.1", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
+console.log(["版本号 v2.0.11", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
