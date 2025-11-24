@@ -34,7 +34,7 @@
  * @property {string} --theme-transition - 主题相关过渡集合
  * @property {string} --flow-color-1..5 - 背景流动效果色
  * @property {number} --flow-opacity - 背景流动效果透明度
- * @property {string} --flow-speed - 背景动画速度（如`10s`）
+ * @property {string} --flow-speed - 背景动画速度
  * @property {string} --progress-max - 进度区最大宽度
  * @property {string} --dock-gap - 最小化停靠时的边缘间距
  *
