@@ -411,6 +411,15 @@ class NeteaseMiniPlayer {
     /**
      * 启动空闲淡出计时器，在最小化时降低存在感
      * @returns {void}
+     * @description
+     * 1. 首先清除现有的空闲计时器
+     * 2. 检查是否启用空闲透明度功能
+     * 3. 设置新的计时器，延迟后触发淡出效果
+     * 4. 计时器时间由idleDelay配置决定
+     * 5. 计时器触发时调用triggerFadeOut开始淡出动画
+     * @example
+     * player.startIdleTimer(); // 启动空闲计时器
+     * @private
      */
     startIdleTimer() {
         this.clearIdleTimer();
@@ -423,6 +432,14 @@ class NeteaseMiniPlayer {
     /**
      * 清除空闲淡出计时器
      * @returns {void}
+     * @description
+     * 1. 检查是否存在空闲计时器实例
+     * 2. 使用clearTimeout清除计时器
+     * 3. 将计时器引用设为null，避免内存泄漏
+     * 4. 通常在用户交互或播放器状态改变时调用
+     * @example
+     * player.clearIdleTimer(); // 清除正在运行的空闲计时器
+     * @private
      */
     clearIdleTimer() {
         if (this.idleTimeout) {
@@ -434,6 +451,16 @@ class NeteaseMiniPlayer {
     /**
      * 触发淡出动画并根据定位进行侧边停靠
      * @returns {void}
+     * @description
+     * 1. 检查是否启用空闲透明度功能
+     * 2. 检查是否已经在空闲状态，避免重复触发
+     * 3. 移除淡入动画类名
+     * 4. 获取当前停靠侧边（左/右）
+     * 5. 添加对应的停靠类名和淡出动画类名
+     * 6. 监听动画结束事件，完成后切换到空闲状态
+     * @example
+     * player.triggerFadeOut(); // 开始淡出到侧边停靠状态
+     * @private
      */
     triggerFadeOut() {
         if (!this.shouldEnableIdleOpacity()) return;
@@ -457,6 +484,16 @@ class NeteaseMiniPlayer {
     /**
      * 恢复不透明度，移除停靠并播放弹出动画
      * @returns {void}
+     * @description
+     * 1. 首先清除空闲计时器
+     * 2. 获取当前停靠侧边和停靠状态
+     * 3. 如果处于停靠状态，播放弹出动画
+     * 4. 监听弹出动画结束，移除停靠类名
+     * 5. 播放淡入动画，恢复到正常显示状态
+     * 6. 监听淡入动画结束，清理动画类名
+     * @example
+     * player.restoreOpacity(); // 从停靠状态恢复到正常显示
+     * @private
      */
     restoreOpacity() {
         this.clearIdleTimer();
@@ -498,16 +535,36 @@ class NeteaseMiniPlayer {
     }
 
     /**
-     * 判断是否启用空闲淡出策略
-     * @returns {boolean} 当处于最小化态时返回`true`
+     * 判断是否启用空闲透明度功能
+     * @returns {boolean} 启用返回true
+     * @description
+     * 1. 检查播放器是否处于最小化状态
+     * 2. 仅当最小化时才启用空闲透明度
+     * 3. 用于控制空闲时的淡出效果
+     * @example
+     * player.isMinimized = true;
+     * player.shouldEnableIdleOpacity(); // true
+     * 
+     * player.isMinimized = false;
+     * player.shouldEnableIdleOpacity(); // false
+     * @private
      */
     shouldEnableIdleOpacity() {
         return this.isMinimized === true;
     }
 
     /**
-     * 初始化阶段应用空闲策略（清理相关类名）
+     * 初始化时应用空闲策略设置
      * @returns {void}
+     * @description
+     * 1. 检查是否启用空闲透明度功能
+     * 2. 如果未启用，清除空闲计时器
+     * 3. 重置空闲状态标识
+     * 4. 移除所有相关的CSS类名（停靠、动画等）
+     * 5. 确保播放器以正常状态显示
+     * @example
+     * player.applyIdlePolicyOnInit(); // 根据配置应用空闲策略
+     * @private
      */
     applyIdlePolicyOnInit() {
         if (!this.shouldEnableIdleOpacity()) {
@@ -519,6 +576,18 @@ class NeteaseMiniPlayer {
     /**
      * 计算当前停靠方向
      * @returns {'left'|'right'} 返回停靠侧边枚举
+     * @description
+     * 1. 根据配置中的position值判断停靠方向
+     * 2. 左上角和左下角返回'left'
+     * 3. 右上角和右下角返回'right'
+     * 4. 其他位置默认返回'right'
+     * @example
+     * player.config.position = 'top-left';
+     * player.getDockSide(); // 'left'
+     * 
+     * player.config.position = 'bottom-right';
+     * player.getDockSide(); // 'right'
+     * @private
      */
     getDockSide() {
         const pos = this.config.position;
@@ -529,6 +598,16 @@ class NeteaseMiniPlayer {
     /**
      * 获取运行环境信息（UA & 媒体特征）
      * @returns {UAInfo} 环境信息结构
+     * @description
+     * 1. 检查是否存在缓存的环境信息，有则直接返回
+     * 2. 解析用户代理字符串获取平台和设备信息
+     * 3. 检测触摸支持、媒体播放能力等特性
+     * 4. 缓存结果以提高后续访问性能
+     * @example
+     * const uaInfo = NeteaseMiniPlayer.getUAInfo();
+     * console.log(uaInfo.platform); // 'mobile' | 'tablet' | 'desktop'
+     * console.log(uaInfo.canPlayType); // 是否支持音频播放
+     * @private
      */
     static getUAInfo() {
         if (NeteaseMiniPlayer._uaCache) return NeteaseMiniPlayer._uaCache;
@@ -1219,9 +1298,17 @@ class NeteaseMiniPlayer {
      */
     updateTimeDisplay() {
         /**
-         * 格式化时间为MM:SS显示格式
-         * @param {number} time - 时间（秒）
-         * @returns {string} 格式化后的时间字符串（MM:SS）
+         * 内部时间格式化函数，将秒数转换为MM:SS格式
+         * @param {number} time - 时间值（秒）
+         * @returns {string} 格式化后的时间字符串
+         * @description
+         * 1. 计算分钟数：Math.floor(time / 60)
+         * 2. 计算剩余秒数：Math.floor(time % 60)
+         * 3. 秒数不足两位时前面补零
+         * 4. 返回格式如 "2:35" 的时间字符串
+         * @example
+         * formatTime(155); // "2:35"
+         * formatTime(65);  // "1:05"
          * @private
          */
         const formatTime = (time) => {
@@ -1550,9 +1637,14 @@ class NeteaseMiniPlayer {
      * 预留的拖拽定位功能（当前禁用）
      * @returns {void}
      * @description
-     * 此功能已预留接口但当前未实现
-     * 未来可用于实现播放器的拖拽定位功能
+     * 1. 当前为预留接口，仅返回不做任何操作
+     * 2. 计划实现播放器的拖拽定位功能
+     * 3. 将支持在页面中自由拖动播放器到任意位置
+     * 4. 需要处理拖拽开始、移动、结束等事件
      * @todo 实现拖拽定位功能，支持播放器在页面中的自由拖动
+     * @example
+     * player.setupDragAndDrop(); // 当前无实际操作
+     * @private
      */
     setupDragAndDrop() {
         return;
