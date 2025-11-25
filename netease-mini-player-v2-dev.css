@@ -34,7 +34,7 @@
  * @property {string} --theme-transition - 主题相关过渡集合
  * @property {string} --flow-color-1..5 - 背景流动效果色
  * @property {number} --flow-opacity - 背景流动效果透明度
- * @property {string} --flow-speed - 背景动画速度
+ * @property {string} --flow-speed - 背景动画速度（如`10s`）
  * @property {string} --progress-max - 进度区最大宽度
  * @property {string} --dock-gap - 最小化停靠时的边缘间距
  *
@@ -1225,3 +1225,74 @@
 @keyframes player-dock-left { from { transform: translateX(0); } to { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } }
 @keyframes player-popout-right { from { transform: translateX(calc(50% + var(--dock-gap, 20px))); } to { transform: translateX(0); } }
 @keyframes player-popout-left { from { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } to { transform: translateX(0); } }
+
+/**
+ * SVG 图标尺寸与居中校正
+ * @class netease-mini-player-svg-icons
+ * @description
+ * - 使所有 SVG 图标继承父元素颜色（适配明暗主题）
+ * - 统一控制按钮与功能按钮内部 SVG 尺寸与居中
+ * - 调整底部控件间距，优化点击区域与无障碍表现
+ * @example
+ * <button class="control-btn">[svg]</button>
+ * <button class="feature-btn">[svg]</button>
+ */
+.netease-mini-player svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+}
+
+.netease-mini-player .feature-btn,
+.netease-mini-player .control-btn {
+    font-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.netease-mini-player .bottom-controls .feature-btn,
+.netease-mini-player .volume-icon {
+    color: var(--text-primary);
+}
+
+.netease-mini-player .control-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.netease-mini-player .play-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.netease-mini-player .play-icon { margin-left: 0; }
+
+.netease-mini-player .bottom-controls .feature-btn svg,
+.netease-mini-player .volume-icon svg,
+.netease-mini-player .minimize-btn svg {
+    width: 100%;
+    height: 100%;
+}
+
+.netease-mini-player .minimize-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.netease-mini-player .volume-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    font-size: 0;
+}
+
+.netease-mini-player .feature-btn {
+    width: 24px;
+    height: 24px;
+}
+
+.netease-mini-player .bottom-controls { gap: 6px; }
