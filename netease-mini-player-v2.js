@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// (()=>{try{const s=document.currentScript;if(s&&s.src){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
+(()=>{try{const s=document.currentScript;if(s&&s.src){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
 const GlobalAudioManager = {
     currentPlayer: null,
     setCurrent(player) {
