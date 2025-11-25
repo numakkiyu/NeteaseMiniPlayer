@@ -1270,10 +1270,11 @@
 .netease-mini-player .play-icon { margin-left: 0; }
 
 .netease-mini-player .bottom-controls .feature-btn svg,
-.netease-mini-player .volume-icon svg,
-.netease-mini-player .minimize-btn svg {
-    width: 100%;
-    height: 100%;
+.netease-mini-player .volume-icon svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    fill: currentColor;
 }
 
 .netease-mini-player .minimize-btn svg {
@@ -1291,8 +1292,8 @@
 }
 
 .netease-mini-player .feature-btn {
-    width: 24px;
-    height: 24px;
+    width: auto;
+    height: auto;
 }
 
 .netease-mini-player .bottom-controls { gap: 6px; }
