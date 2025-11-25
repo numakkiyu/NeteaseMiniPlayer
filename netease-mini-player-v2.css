@@ -599,10 +599,45 @@
     100% { text-shadow: 0 0 12px rgba(86, 151, 227, 0.5); }
 }
 
+.lyric-line.word-lyric {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.lyric-word-line {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.1s ease-out;
+}
+
+.lyric-line.word-lyric-active {
+    -webkit-mask: linear-gradient(90deg, #000 0%, #000 var(--line-progress, 0%), transparent var(--line-progress, 0%));
+    mask: linear-gradient(90deg, #000 0%, #000 var(--line-progress, 0%), transparent var(--line-progress, 0%));
+}
+
+.netease-mini-player[data-theme="dark"] .lyric-line.word-lyric-active {
+    text-shadow: 0 0 8px rgba(255, 165, 0, 0.7);
+}
+
+.lyric-line.word-lyric::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: var(--line-progress, 0%);
+    height: 2px;
+    background: var(--accent-gradient);
+    border-radius: 1px;
+    transition: width 0.1s ease;
+}
+
 .controls {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-shrink: 0;
 }
 
@@ -641,8 +676,8 @@
 }
 
 .play-btn {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     font-size: 14px;
     background: var(--primary-bg);
     box-shadow: 
@@ -783,6 +818,50 @@
     border-radius: 2px;
     width: 70%;
     transition: width 0.1s ease;
+}
+
+.netease-mini-player svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor; 
+    display: block;
+}
+
+.control-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+.feature-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.volume-icon svg {
+    width: 14px;
+    height: 14px;
+}
+
+.play-btn svg {
+    width: 22px;
+    height: 22px;
+    margin-left: 2px; 
+}
+
+.play-btn .pause-icon svg {
+    margin-left: 0;
+}
+
+.control-btn, .feature-btn {
+    font-size: 0; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minimize-btn svg {
+    width: 18px;
+    height: 18px;
 }
 
 .sr-visually-hidden {
@@ -1174,3 +1253,59 @@
 @keyframes player-dock-left { from { transform: translateX(0); } to { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } }
 @keyframes player-popout-right { from { transform: translateX(calc(50% + var(--dock-gap, 20px))); } to { transform: translateX(0); } }
 @keyframes player-popout-left { from { transform: translateX(calc(-50% - var(--dock-gap, 20px))); } to { transform: translateX(0); } }
+
+.netease-mini-player .feature-btn,
+.netease-mini-player .control-btn {
+    font-size: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.netease-mini-player .bottom-controls .feature-btn,
+.netease-mini-player .volume-icon {
+    color: var(--text-primary);
+}
+
+.netease-mini-player .control-btn svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    fill: currentColor;
+}
+
+.netease-mini-player .play-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.netease-mini-player .play-icon { margin-left: 0; }
+
+.netease-mini-player .bottom-controls .feature-btn svg,
+.netease-mini-player .volume-icon svg,
+.netease-mini-player .minimize-btn svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: currentColor;
+}
+
+.netease-mini-player .volume-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    font-size: 0;
+}
+
+.netease-mini-player .feature-btn {
+    width: 14px;
+    height: 14px;
+}
+
+.netease-mini-player .bottom-controls { gap: 6px; }
+
+.netease-mini-player .volume-icon svg { width: 18px; height: 18px; }
+
+.netease-mini-player.minimized .minimize-btn { font-size: 0; }
