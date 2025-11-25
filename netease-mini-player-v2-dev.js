@@ -297,10 +297,10 @@ class NeteaseMiniPlayer {
                             </div>
                         </div>
                     </div>
-                    <button class="feature-btn lyrics-btn" title="显示/隐藏歌词">${ICONS.lyrics}</button>
-                    ${!this.config.embed ? `<button class="feature-btn loop-mode-btn" title="列表循环">${ICONS.loopList}</button>` : ''}
-                    ${!this.config.embed ? `<button class="feature-btn list-btn" title="播放列表">${ICONS.list}</button>` : ''}
-                    ${!this.config.embed ? `<button class="feature-btn minimize-btn" title="缩小/展开">${ICONS.minimize}</button>` : ''}
+                    <span class="feature-btn lyrics-btn" role="button" title="显示/隐藏歌词">${ICONS.lyrics}</span>
+                    ${!this.config.embed ? `<span class="feature-btn loop-mode-btn" role="button" title="列表循环">${ICONS.loopList}</span>` : ''}
+                    ${!this.config.embed ? `<span class="feature-btn list-btn" role="button" title="播放列表">${ICONS.list}</span>` : ''}
+                    ${!this.config.embed ? `<span class="feature-btn minimize-btn" role="button" title="缩小/展开">${ICONS.minimize}</span>` : ''}
                 </div>
             </div>
             <div class="playlist-container">
