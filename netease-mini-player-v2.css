@@ -701,6 +701,10 @@
     color: white;
 }
 
+.control-btn:active span{
+    color: white;
+}
+
 .play-icon {
     margin-left: 2px;
 }
