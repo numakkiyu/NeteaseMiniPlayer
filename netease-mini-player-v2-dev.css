@@ -675,14 +675,6 @@
     background: var(--secondary-bg);
 }
 
-.control-btn:active {
-    box-shadow: 
-        inset 2px 2px 4px var(--shadow-dark),
-        inset -2px -2px 4px var(--shadow-light);
-    background: var(--accent-gradient);
-    color: white;
-}
-
 .play-btn {
     width: 36px;
     height: 36px;
@@ -707,6 +699,18 @@
     box-shadow: 
         inset 1px 1px 2px var(--shadow-dark),
         inset -1px -1px 2px var(--shadow-light);
+}
+
+.control-btn:active {
+    box-shadow: 
+        inset 2px 2px 4px var(--shadow-dark),
+        inset -2px -2px 4px var(--shadow-light);
+    background: var(--accent-gradient);
+    color: white;
+}
+
+.control-btn:active span{
+    color: white;
 }
 
 .play-icon {
