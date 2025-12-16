@@ -16,6 +16,8 @@
 >
 > **演示地址：** [https://nmp.hypcvgm.top/](https://nmp.hypcvgm.top/)
 
+> API 接口可以自行更换，默认接口可能不稳定（想实现VIP音乐可以部署NeteaseCloudMusicApi并且登录VIP账户）
+
 ---
 
 ## ✨ 核心特性 v2.1
