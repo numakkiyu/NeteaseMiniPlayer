@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(()=>{try{const s=document.currentScript;if(s&&s.src){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
+(() => { try { const s = document.currentScript; if (s && s.src) { fetch(s.src, { mode: 'cors', credentials: 'omit' }).catch(() => { }); } } catch (e) { } })();
 const GlobalAudioManager = {
     currentPlayer: null,
     setCurrent(player) {
@@ -35,13 +35,27 @@ const ICONS = {
     volume: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M533.6 96.5C523.3 88.1 508.2 89.7 499.8 100C491.4 110.3 493 125.4 503.3 133.8C557.5 177.8 592 244.8 592 320C592 395.2 557.5 462.2 503.3 506.3C493 514.7 491.5 529.8 499.8 540.1C508.1 550.4 523.3 551.9 533.6 543.6C598.5 490.7 640 410.2 640 320C640 229.8 598.5 149.2 533.6 96.5zM473.1 171C462.8 162.6 447.7 164.2 439.3 174.5C430.9 184.8 432.5 199.9 442.8 208.3C475.3 234.7 496 274.9 496 320C496 365.1 475.3 405.3 442.8 431.8C432.5 440.2 431 455.3 439.3 465.6C447.6 475.9 462.8 477.4 473.1 469.1C516.3 433.9 544 380.2 544 320.1C544 260 516.3 206.3 473.1 171.1zM412.6 245.5C402.3 237.1 387.2 238.7 378.8 249C370.4 259.3 372 274.4 382.3 282.8C393.1 291.6 400 305 400 320C400 335 393.1 348.4 382.3 357.3C372 365.7 370.5 380.8 378.8 391.1C387.1 401.4 402.3 402.9 412.6 394.6C434.1 376.9 448 350.1 448 320C448 289.9 434.1 263.1 412.6 245.5zM80 416L128 416L262.1 535.2C268.5 540.9 276.7 544 285.2 544C304.4 544 320 528.4 320 509.2L320 130.8C320 111.6 304.4 96 285.2 96C276.7 96 268.5 99.1 262.1 104.8L128 224L80 224C53.5 224 32 245.5 32 272L32 368C32 394.5 53.5 416 80 416z"/></svg>`,
     lyrics: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M532 71C539.6 77.1 544 86.3 544 96L544 400C544 444.2 501 480 448 480C395 480 352 444.2 352 400C352 355.8 395 320 448 320C459.2 320 470 321.6 480 324.6L480 207.9L256 257.7L256 464C256 508.2 213 544 160 544C107 544 64 508.2 64 464C64 419.8 107 384 160 384C171.2 384 182 385.6 192 388.6L192 160C192 145 202.4 132 217.1 128.8L505.1 64.8C514.6 62.7 524.5 65 532.1 71.1z"/></svg>`,
     list: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M104 112C90.7 112 80 122.7 80 136L80 184C80 197.3 90.7 208 104 208L152 208C165.3 208 176 197.3 176 184L176 136C176 122.7 165.3 112 152 112L104 112zM256 128C238.3 128 224 142.3 224 160C224 177.7 238.3 192 256 192L544 192C561.7 192 576 177.7 576 160C576 142.3 561.7 128 544 128L256 128zM256 288C238.3 288 224 302.3 224 320C224 337.7 238.3 352 256 352L544 352C561.7 352 576 337.7 576 320C576 302.3 561.7 288 544 288L256 288zM256 448C238.3 448 224 462.3 224 480C224 497.7 238.3 512 256 512L544 512C561.7 512 576 497.7 576 480C576 462.3 561.7 448 544 448L256 448zM80 296L80 344C80 357.3 90.7 368 104 368L152 368C165.3 368 176 357.3 176 344L176 296C176 282.7 165.3 272 152 272L104 272C90.7 272 80 282.7 80 296zM104 432C90.7 432 80 442.7 80 456L80 504C80 517.3 90.7 528 104 528L152 528C165.3 528 176 517.3 176 504L176 456C176 442.7 165.3 432 152 432L104 432z"/></svg>`,
-    minimize: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 352C302.3 352 288 337.7 288 320C288 302.3 302.3 288 320 288C337.7 288 352 302.3 352 320C352 337.7 337.7 352 320 352zM224 320C224 373 267 416 320 416C373 416 416 373 416 320C416 267 373 224 320 224C267 224 224 267 224 320zM168 304C168 271.6 184.3 237.4 210.8 210.8C237.3 184.2 271.6 168 304 168C317.3 168 328 157.3 328 144C328 130.7 317.3 120 304 120C256.1 120 210.3 143.5 176.9 176.9C143.5 210.3 120 256.1 120 304C120 317.3 130.7 328 144 328C157.3 328 168 317.3 168 304z"/></svg>`, 
-    maximize: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 352C302.3 352 288 337.7 288 320C288 302.3 302.3 288 320 288C337.7 288 352 302.3 352 320C352 337.7 337.7 352 320 352zM224 320C224 373 267 416 320 416C373 416 416 373 416 320C416 267 373 224 320 224C267 224 224 267 224 320zM168 304C168 271.6 184.3 237.4 210.8 210.8C237.3 184.2 271.6 168 304 168C317.3 168 328 157.3 328 144C328 130.7 317.3 120 304 120C256.1 120 210.3 143.5 176.9 176.9C143.5 210.3 120 256.1 120 304C120 317.3 130.7 328 144 328C157.3 328 168 317.3 168 304z"/></svg>`, 
+    minimize: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 352C302.3 352 288 337.7 288 320C288 302.3 302.3 288 320 288C337.7 288 352 302.3 352 320C352 337.7 337.7 352 320 352zM224 320C224 373 267 416 320 416C373 416 416 373 416 320C416 267 373 224 320 224C267 224 224 267 224 320zM168 304C168 271.6 184.3 237.4 210.8 210.8C237.3 184.2 271.6 168 304 168C317.3 168 328 157.3 328 144C328 130.7 317.3 120 304 120C256.1 120 210.3 143.5 176.9 176.9C143.5 210.3 120 256.1 120 304C120 317.3 130.7 328 144 328C157.3 328 168 317.3 168 304z"/></svg>`,
+    maximize: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320zM320 352C302.3 352 288 337.7 288 320C288 302.3 302.3 288 320 288C337.7 288 352 302.3 352 320C352 337.7 337.7 352 320 352zM224 320C224 373 267 416 320 416C373 416 416 373 416 320C416 267 373 224 320 224C267 224 224 267 224 320zM168 304C168 271.6 184.3 237.4 210.8 210.8C237.3 184.2 271.6 168 304 168C317.3 168 328 157.3 328 144C328 130.7 317.3 120 304 120C256.1 120 210.3 143.5 176.9 176.9C143.5 210.3 120 256.1 120 304C120 317.3 130.7 328 144 328C157.3 328 168 317.3 168 304z"/></svg>`,
     loopList: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M534.6 182.6C547.1 170.1 547.1 149.8 534.6 137.3L470.6 73.3C461.4 64.1 447.7 61.4 435.7 66.4C423.7 71.4 416 83.1 416 96L416 128L256 128C150 128 64 214 64 320C64 337.7 78.3 352 96 352C113.7 352 128 337.7 128 320C128 249.3 185.3 192 256 192L416 192L416 224C416 236.9 423.8 248.6 435.8 253.6C447.8 258.6 461.5 255.8 470.7 246.7L534.7 182.7zM105.4 457.4C92.9 469.9 92.9 490.2 105.4 502.7L169.4 566.7C178.6 575.9 192.3 578.6 204.3 573.6C216.3 568.6 224 556.9 224 544L224 512L384 512C490 512 576 426 576 320C576 302.3 561.7 288 544 288C526.3 288 512 302.3 512 320C512 390.7 454.7 448 384 448L224 448L224 416C224 403.1 216.2 391.4 204.2 386.4C192.2 381.4 178.5 384.2 169.3 393.3L105.3 457.3z"/></svg>`,
-    loopSingle: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M534.6 182.6C547.1 170.1 547.1 149.8 534.6 137.3L470.6 73.3C461.4 64.1 447.7 61.4 435.7 66.4C423.7 71.4 416 83.1 416 96L416 128L256 128C150 128 64 214 64 320C64 337.7 78.3 352 96 352C113.7 352 128 337.7 128 320C128 249.3 185.3 192 256 192L416 192L416 224C416 236.9 423.8 248.6 435.8 253.6C447.8 258.6 461.5 255.8 470.7 246.7L534.7 182.7zM105.4 457.4C92.9 469.9 92.9 490.2 105.4 502.7L169.4 566.7C178.6 575.9 192.3 578.6 204.3 573.6C216.3 568.6 224 556.9 224 544L224 512L384 512C490 512 576 426 576 320C576 302.3 561.7 288 544 288C526.3 288 512 302.3 512 320C512 390.7 454.7 448 384 448L224 448L224 416C224 403.1 216.2 391.4 204.2 386.4C192.2 381.4 178.5 384.2 169.3 393.3L105.3 457.3z"/><path d="M295 280L305 260L335 260L335 380L305 380L305 280Z"/></svg>`, 
+    loopSingle: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M534.6 182.6C547.1 170.1 547.1 149.8 534.6 137.3L470.6 73.3C461.4 64.1 447.7 61.4 435.7 66.4C423.7 71.4 416 83.1 416 96L416 128L256 128C150 128 64 214 64 320C64 337.7 78.3 352 96 352C113.7 352 128 337.7 128 320C128 249.3 185.3 192 256 192L416 192L416 224C416 236.9 423.8 248.6 435.8 253.6C447.8 258.6 461.5 255.8 470.7 246.7L534.7 182.7zM105.4 457.4C92.9 469.9 92.9 490.2 105.4 502.7L169.4 566.7C178.6 575.9 192.3 578.6 204.3 573.6C216.3 568.6 224 556.9 224 544L224 512L384 512C490 512 576 426 576 320C576 302.3 561.7 288 544 288C526.3 288 512 302.3 512 320C512 390.7 454.7 448 384 448L224 448L224 416C224 403.1 216.2 391.4 204.2 386.4C192.2 381.4 178.5 384.2 169.3 393.3L105.3 457.3z"/><path d="M295 280L305 260L335 260L335 380L305 380L305 280Z"/></svg>`,
     shuffle: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M467.8 98.4C479.8 93.4 493.5 96.2 502.7 105.3L566.7 169.3C572.7 175.3 576.1 183.4 576.1 191.9C576.1 200.4 572.7 208.5 566.7 214.5L502.7 278.5C493.5 287.7 479.8 290.4 467.8 285.4C455.8 280.4 448 268.9 448 256L448 224L416 224C405.9 224 396.4 228.7 390.4 236.8L358 280L318 226.7L339.2 198.4C357.3 174.2 385.8 160 416 160L448 160L448 128C448 115.1 455.8 103.4 467.8 98.4zM218 360L258 413.3L236.8 441.6C218.7 465.8 190.2 480 160 480L96 480C78.3 480 64 465.7 64 448C64 430.3 78.3 416 96 416L160 416C170.1 416 179.6 411.3 185.6 403.2L218 360zM502.6 534.6C493.4 543.8 479.7 546.5 467.7 541.5C455.7 536.5 448 524.9 448 512L448 480L416 480C385.8 480 357.3 465.8 339.2 441.6L185.6 236.8C179.6 228.7 170.1 224 160 224L96 224C78.3 224 64 209.7 64 192C64 174.3 78.3 160 96 160L160 160C190.2 160 218.7 174.2 236.8 198.4L390.4 403.2C396.4 411.3 405.9 416 416 416L448 416L448 384C448 371.1 455.8 359.4 467.8 354.4C479.8 349.4 493.5 352.2 502.7 361.3L566.7 425.3C572.7 431.3 576.1 439.4 576.1 447.9C576.1 456.4 572.7 464.5 566.7 470.5L502.7 534.5z"/></svg>`
 };
 class NeteaseMiniPlayer {
+    // VIP音乐解析API（新增）
+    static VIP_API_BASE = 'https://wyy.felicity.ac.cn/api.php';
+
+    // 原API保留用于歌词/封面（不变）
+    static BASE_API = 'https://api.hypcvgm.top/NeteaseMiniPlayer/nmp.php';
+
+    // 音质映射表（可选，用于验证用户输入）
+    static QUALITY_MAP = {
+        '128k': 128000, '192k': 192000, '320k': 320000,
+        'flac': 824706, 'flac24bit': 1587035, 'dolby': 2695684,
+        'sky': 804505, 'master': 2695684, 'lossless': 824706,
+        'hires': 1587035, 'jyeffect': 2695684, 'jymaster': 4532511
+    };
+
     constructor(element) {
         this.element = element;
         this.element.neteasePlayer = this;
@@ -72,7 +86,7 @@ class NeteaseMiniPlayer {
         const validPositions = ['static', 'top-left', 'top-right', 'bottom-left', 'bottom-right'];
         const finalPosition = validPositions.includes(position) ? position : 'static';
         const defaultMinimized = element.dataset.defaultMinimized === 'true';
-        
+
         const embedValue = element.getAttribute('data-embed') || element.dataset.embed;
         const isEmbed = embedValue === 'true' || embedValue === true;
 
@@ -89,7 +103,8 @@ class NeteaseMiniPlayer {
             theme: element.dataset.theme || 'auto',
             size: element.dataset.size || 'compact',
             defaultMinimized: defaultMinimized,
-            autoPauseDisabled: autoPauseDisabled
+            autoPauseDisabled: autoPauseDisabled,
+            quality: element.dataset.quality || '320k' // 新增音质配置
         };
     }
     async init() {
@@ -97,11 +112,11 @@ class NeteaseMiniPlayer {
             this.element.setAttribute('data-embed', 'true');
         }
         this.element.setAttribute('data-position', this.config.position);
-        
+
         if (this.config.embed) {
             this.element.classList.add('netease-mini-player-embed');
         }
-        
+
         this.initTheme();
         this.createPlayerHTML();
         this.applyResponsiveControls?.();
@@ -239,8 +254,8 @@ class NeteaseMiniPlayer {
                 return;
             }
             if (this.currentSong && this.currentSong.id) {
-            const songUrl = `https://music.163.com/song?id=${this.currentSong.id}`;
-            window.open(songUrl, '_blank', 'noopener,noreferrer');
+                const songUrl = `https://music.163.com/song?id=${this.currentSong.id}`;
+                window.open(songUrl, '_blank', 'noopener,noreferrer');
             }
         });
         let isDragging = false;
@@ -279,7 +294,7 @@ class NeteaseMiniPlayer {
             this.elements.minimizeBtn.addEventListener('click', () => this.toggleMinimize());
         }
         document.addEventListener('click', (e) => {
-            if (this.elements.playlistContainer && 
+            if (this.elements.playlistContainer &&
                 this.elements.playlistContainer.classList.contains('show')) {
                 if (!this.element.contains(e.target)) {
                     this.togglePlaylist(false);
@@ -507,7 +522,7 @@ class NeteaseMiniPlayer {
         this.updateVolumeDisplay();
     }
     async apiRequest(endpoint, params = {}) {
-        const baseUrl = 'https://api.hypcvgm.top/NeteaseMiniPlayer/nmp.php';
+        const baseUrl = NeteaseMiniPlayer.BASE_API;
         const queryString = new URLSearchParams(params).toString();
         const url = `${baseUrl}${endpoint}${queryString ? '?' + queryString : ''}`;
         try {
@@ -545,10 +560,10 @@ class NeteaseMiniPlayer {
         if (!tracks) {
             const response = await this.apiRequest('/playlist/track/all', {
                 id: playlistId,
-                limit: 1000, 
+                limit: 1000,
                 offset: 0
             });
-            tracks = response.songs; 
+            tracks = response.songs;
             this.setCache(cacheKey, tracks);
         }
         this.playlist = tracks.map(song => ({
@@ -597,7 +612,7 @@ class NeteaseMiniPlayer {
     }
     async loadCurrentSong() {
         if (this.playlist.length === 0) return;
-        
+
         if (this.showLyrics) {
             this.elements.lyricLine.textContent = '♪ 加载歌词中... ♪';
             this.elements.lyricTranslation.style.display = 'none';
@@ -606,7 +621,7 @@ class NeteaseMiniPlayer {
             this.lyrics = [];
             this.currentLyricIndex = -1;
         }
-        
+
         const song = this.playlist[this.currentIndex];
         this.currentSong = song;
         this.updateSongInfo(song);
@@ -678,37 +693,65 @@ class NeteaseMiniPlayer {
     async loadSongUrl(songId) {
         const cacheKey = this.getCacheKey('song_url', songId);
         let urlData = this.getCache(cacheKey);
+
         if (!urlData) {
             try {
-                const response = await this.apiRequest('/song/url/v1', { 
-                    id: songId, 
-                    level: 'exhigh' 
-                });
-                if (response.data && response.data.length > 0) {
-                    urlData = response.data[0];
+                // 1. 优先使用VIP解析API
+                const quality = this.config.quality || '320k';
+                const vipResponse = await fetch(
+                    `${NeteaseMiniPlayer.VIP_API_BASE}?id=${songId}&quality=${quality}`
+                );
+
+                if (!vipResponse.ok) {
+                    throw new Error(`VIP API HTTP错误: ${vipResponse.status}`);
+                }
+
+                const vipData = await vipResponse.json();
+
+                // 成功条件：存在url字段
+                if (vipData && vipData.url) {
+                    urlData = {
+                        url: vipData.url,
+                        type: vipData.type || 'mp3',
+                        size: vipData.size || 0,
+                        requestedQuality: vipData.requested_quality,
+                        returnedQuality: vipData.returned_quality
+                    };
                     this.setCache(cacheKey, urlData, 30 * 60 * 1000);
+                    console.log(`✅ VIP API解析成功 [${songId}]:`, vipData.returned_quality);
+                } else {
+                    throw new Error('VIP API返回数据无效');
                 }
             } catch (error) {
-                console.error('获取音频URL失败:', error);
+                console.warn(`⚠️ VIP API失败 [${songId}]:`, error.message);
+
+                // 2. 降级到原API
                 try {
-                    const fallbackResponse = await this.apiRequest('/song/url/v1', { 
-                        id: songId, 
-                        level: 'standard' 
+                    const response = await this.apiRequest('/song/url/v1', {
+                        id: songId,
+                        level: 'exhigh'
                     });
-                    if (fallbackResponse.data && fallbackResponse.data.length > 0) {
-                        urlData = fallbackResponse.data[0];
+
+                    if (response.data && response.data.length > 0) {
+                        urlData = response.data[0];
+                        this.setCache(cacheKey, urlData, 30 * 60 * 1000);
+                        console.log(`✅ 原API降级解析成功 [${songId}]`);
+                    } else {
+                        throw new Error('原API返回空数据');
                     }
                 } catch (fallbackError) {
-                    console.error('降级获取音频URL也失败:', fallbackError);
+                    console.error(`❌ 降级API也失败 [${songId}]:`, fallbackError);
+                    throw new Error('所有API均无法解析该歌曲');
                 }
             }
         }
-        if (urlData && urlData.url) {
-            const httpsUrl = this.ensureHttps(urlData.url);
-            console.log('设置音频源:', httpsUrl);
-            this.audio.src = httpsUrl;
+
+        // 3. 设置音频源
+        if (urlData?.url) {
+            console.log(`🎵 设置音频源: ${urlData.url}`);
+            this.audio.src = urlData.url;
         } else {
-            throw new Error('无法获取播放地址');
+            throw new Error('无法获取有效播放地址');
         }
     }
     ensureHttps(url) {
@@ -740,7 +783,7 @@ class NeteaseMiniPlayer {
     parseLyrics(lyricData) {
         this.lyrics = [];
         this.currentLyricIndex = -1;
-        
+
         if (!lyricData || (!lyricData.lrc?.lyric && !lyricData.tlyric?.lyric)) {
             this.elements.lyricLine.textContent = '暂无歌词';
             this.elements.lyricTranslation.style.display = 'none';
@@ -749,7 +792,7 @@ class NeteaseMiniPlayer {
             return;
         }
         const lrcLines = lyricData.lrc.lyric.split('\n');
-        const tlyricLines = lyricData.tlyric && lyricData.tlyric.lyric ? 
+        const tlyricLines = lyricData.tlyric && lyricData.tlyric.lyric ?
             lyricData.tlyric.lyric.split('\n') : [];
         const lrcMap = new Map();
         lrcLines.forEach(line => {
@@ -826,7 +869,7 @@ class NeteaseMiniPlayer {
         }
     }
     async nextSong() {
-    const wasPlaying = this.isPlaying;
+        const wasPlaying = this.isPlaying;
         if (this.playlist.length <= 1) {
             if (this.playMode === 'single') {
                 this.audio.currentTime = 0;
@@ -837,13 +880,13 @@ class NeteaseMiniPlayer {
             if (wasPlaying) await this.play();
             return;
         }
-    
+
         let newIndex;
         if (this.playMode === 'shuffle') {
             const availableIndices = this.playlist
                 .map((_, i) => i)
                 .filter(i => i !== this.currentIndex);
-            
+
             if (availableIndices.length === 0) {
                 newIndex = this.currentIndex;
             } else {
@@ -858,12 +901,12 @@ class NeteaseMiniPlayer {
         } else {
             newIndex = (this.currentIndex + 1) % this.playlist.length;
         }
-    
+
         this.currentIndex = newIndex;
         await this.loadCurrentSong();
-        
+
         this.updatePlaylistDisplay();
-        
+
         if (wasPlaying) {
             setTimeout(async () => {
                 try {
@@ -907,28 +950,28 @@ class NeteaseMiniPlayer {
             if (newIndex >= 0 && newIndex < this.lyrics.length) {
                 const lyric = this.lyrics[newIndex];
                 const lyricText = lyric.text || '♪';
-            
+
                 this.elements.lyricLine.classList.remove('current');
-            
+
                 requestAnimationFrame(() => {
                     this.elements.lyricLine.textContent = lyricText;
                     this.checkLyricScrolling(this.elements.lyricLine, lyricText);
-            
+
                     this.elements.lyricLine.classList.add('current');
-            
+
                     if (lyric.translation) {
                         this.elements.lyricTranslation.textContent = lyric.translation;
                         this.elements.lyricTranslation.style.display = 'block';
-                        this.elements.lyricTranslation.classList.remove('current'); 
+                        this.elements.lyricTranslation.classList.remove('current');
                         requestAnimationFrame(() => {
-                            this.elements.lyricTranslation.classList.add('current'); 
+                            this.elements.lyricTranslation.classList.add('current');
                         });
                     } else {
                         this.elements.lyricTranslation.style.display = 'none';
                         this.elements.lyricTranslation.classList.remove('current', 'scrolling');
                     }
                 });
-            
+
                 this.elements.lyricsContainer.classList.add('switching');
                 setTimeout(() => {
                     this.elements.lyricsContainer.classList.remove('switching');
@@ -1045,10 +1088,10 @@ class NeteaseMiniPlayer {
         const modes = ['list', 'single', 'shuffle'];
         const currentIndex = modes.indexOf(this.playMode);
         this.playMode = modes[(currentIndex + 1) % 3];
-        
+
         const iconSvgs = { list: ICONS.loopList, single: ICONS.loopSingle, shuffle: ICONS.shuffle };
         const titles = { list: '列表循环', single: '单曲循环', shuffle: '随机播放' };
-        
+
         if (this.elements.loopModeBtn) {
             this.elements.loopModeBtn.innerHTML = iconSvgs[this.playMode];
             this.elements.loopModeBtn.title = titles[this.playMode];
@@ -1063,7 +1106,7 @@ class NeteaseMiniPlayer {
             if (this.elements.minimizeBtn) {
                 this.elements.minimizeBtn.classList.add('active');
                 this.elements.minimizeBtn.title = '展开';
-                this.elements.minimizeBtn.innerHTML = ICONS.maximize; 
+                this.elements.minimizeBtn.innerHTML = ICONS.maximize;
             }
             this.clearIdleTimer();
             this.isIdle = false;
@@ -1169,12 +1212,12 @@ class NeteaseMiniPlayer {
     detectCSSTheme() {
         try {
             const rootStyles = getComputedStyle(document.documentElement);
-            const bgColor = rootStyles.getPropertyValue('--bg-color') || 
-                           rootStyles.getPropertyValue('--background-color') ||
-                           rootStyles.getPropertyValue('--color-bg');
-            const textColor = rootStyles.getPropertyValue('--text-color') || 
-                             rootStyles.getPropertyValue('--color-text') ||
-                             rootStyles.getPropertyValue('--text-primary');
+            const bgColor = rootStyles.getPropertyValue('--bg-color') ||
+                rootStyles.getPropertyValue('--background-color') ||
+                rootStyles.getPropertyValue('--color-bg');
+            const textColor = rootStyles.getPropertyValue('--text-color') ||
+                rootStyles.getPropertyValue('--color-text') ||
+                rootStyles.getPropertyValue('--text-primary');
             if (bgColor || textColor) {
                 const isDarkBg = this.isColorDark(bgColor);
                 const isLightText = this.isColorLight(textColor);
@@ -1241,7 +1284,7 @@ class NeteaseMiniPlayer {
                 if (this.config.theme === 'auto') {
                     let shouldUpdate = false;
                     mutations.forEach((mutation) => {
-                        if (mutation.type === 'attributes' && 
+                        if (mutation.type === 'attributes' &&
                             (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
                             shouldUpdate = true;
                         }
@@ -1324,9 +1367,9 @@ class NMPv2ShortcodeParser {
      */
     processTextNodes(container) {
         const walker = document.createTreeWalker(
-            container, 
-            NodeFilter.SHOW_TEXT, 
-            null, 
+            container,
+            NodeFilter.SHOW_TEXT,
+            null,
             false
         );
 
@@ -1341,7 +1384,7 @@ class NMPv2ShortcodeParser {
         textNodes.forEach(node => {
             const content = node.textContent;
             const shortcodes = this.extractShortcodes(content);
-            
+
             if (shortcodes.length > 0) {
                 const fragment = document.createDocumentFragment();
                 let lastIndex = 0;
@@ -1417,12 +1460,12 @@ class NMPv2ShortcodeParser {
             const parts = content.split(/,\s*/);
             const firstPart = parts.shift();
             shortcode.id = firstPart.replace('playlist=', '').trim();
-            
+
             parts.forEach(part => this.parseParam(part, shortcode.params));
         } else if (content.includes('=')) {
             const parts = content.split(/,\s*/);
             const firstPart = parts.shift();
-            
+
             if (firstPart.includes('=')) {
                 this.parseParam(firstPart, shortcode.params);
                 parts.forEach(part => this.parseParam(part, shortcode.params));
@@ -1497,8 +1540,8 @@ class NMPv2ShortcodeParser {
 
 if (typeof window !== 'undefined') {
     window.nmpv2ShortcodeParser = new NMPv2ShortcodeParser();
-    
-    window.processNMPv2Shortcodes = function(container) {
+
+    window.processNMPv2Shortcodes = function (container) {
         if (container instanceof Element) {
             window.nmpv2ShortcodeParser.processContainer(container);
         } else {
@@ -1509,14 +1552,14 @@ if (typeof window !== 'undefined') {
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
-        renderShortcodes: function(html) {
+        renderShortcodes: function (html) {
             return html.replace(/\{nmpv2:([^}]*)\}/g, (match, content) => {
                 let shortcode = {
                     type: 'song',
                     id: null,
                     params: {}
                 };
-                
+
                 if (content.startsWith('playlist=')) {
                     shortcode.type = 'playlist';
                     const parts = content.split(/,\s*/);
@@ -1548,7 +1591,7 @@ if (typeof module !== 'undefined' && module.exports) {
                 }
 
                 let html = '<div class="netease-mini-player"';
-                
+
                 if (shortcode.type === 'playlist' && shortcode.id) {
                     html += ` data-playlist-id="${shortcode.id}"`;
                 } else if (shortcode.id) {
