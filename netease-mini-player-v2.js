@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-(()=>{try{const s=document.currentScript;if(s&&s.src){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
+(()=>{try{const s=document.currentScript;if(s&&s.src&&!s.src.startsWith('file:')){fetch(s.src,{mode:'cors',credentials:'omit'}).catch(()=>{});}}catch(e){}})();
 const GlobalAudioManager = {
     currentPlayer: null,
     setCurrent(player) {
@@ -126,7 +126,56 @@ class NeteaseMiniPlayer {
             if (this.playlist.length > 0) {
                 await this.loadCurrentSong();
                 if (this.config.autoplay && !this.config.embed) {
-                    this.play();
+                    this.audio.muted = true;
+                    const originalVolume = this.volume;
+                    this.audio.volume = 0;
+                    try {
+                        await this.play();
+                    } catch (e) {
+                        console.log('静音自动播放被拦截，转为交互后播放');
+                    }
+                    const interactionEvents = ['click', 'touchstart', 'keydown', 'wheel', 'scroll'];
+                    const enableAudio = () => {
+                        interactionEvents.forEach(event => {
+                            document.removeEventListener(event, enableAudio);
+                        });
+                        this.audio.muted = false;
+                        if (!this.isPlaying) {
+                            this.play().then(() => {
+                                this.audio.volume = 0;
+                                fadeIn();
+                            }).catch(e => console.error('交互后播放失败:', e));
+                        } else {
+                            this.audio.volume = 0;
+                            fadeIn();
+                        }
+                        const fadeIn = () => {
+                            let currentVol = 0;
+                            const targetVol = originalVolume;
+                            const step = targetVol / 10;
+                            const interval = 50;
+                            const fadeTimer = setInterval(() => {
+                                currentVol += step;
+                                if (currentVol >= targetVol) {
+                                    currentVol = targetVol;
+                                    clearInterval(fadeTimer);
+                                }
+                                this.audio.volume = currentVol;
+                                this.volume = currentVol;
+                            }, interval);
+                        };
+                    };
+                    if (this.isPlaying) {
+                        interactionEvents.forEach(event => {
+                            document.addEventListener(event, enableAudio, { once: true, passive: true });
+                        });
+                    } else {
+                        this.audio.muted = false;
+                        this.audio.volume = originalVolume;
+                        interactionEvents.forEach(event => {
+                            document.addEventListener(event, enableAudio, { once: true, passive: true });
+                        });
+                    }
                 }
             }
             if (this.config.defaultMinimized && !this.config.embed && this.config.position !== 'static') {
@@ -805,6 +854,11 @@ class NeteaseMiniPlayer {
             this.elements.albumCover.classList.add('playing');
             this.element.classList.add('player-playing');
         } catch (error) {
+            if (error.name === 'NotAllowedError') {
+                console.warn('自动播放被拦截 (NotAllowedError)');
+                this.isPlaying = false;
+                throw error;
+            }
             console.error('播放失败:', error);
             this.showError('播放失败');
         }
@@ -1582,4 +1636,4 @@ if (typeof module !== 'undefined' && module.exports) {
     };
 }
 
-console.log(["版本号 v2.1.0", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
+console.log(["版本号 v2.1.0.2", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
