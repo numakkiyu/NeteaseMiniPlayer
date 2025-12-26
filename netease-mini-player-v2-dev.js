@@ -186,6 +186,9 @@ class NeteaseMiniPlayer {
         const embedValue = element.getAttribute('data-embed') || element.dataset.embed;
         const isEmbed = embedValue === 'true' || embedValue === true;
 
+        const autoPauseAttr = element.getAttribute('data-auto-pause') ?? element.dataset.autoPause;
+        const autoPauseDisabled = autoPauseAttr === 'true' || autoPauseAttr === true;
+
         return {
             embed: isEmbed,
             autoplay: element.dataset.autoplay === 'true',
@@ -195,7 +198,8 @@ class NeteaseMiniPlayer {
             lyric: element.dataset.lyric !== 'false',
             theme: element.dataset.theme || 'auto',
             size: element.dataset.size || 'compact',
-            defaultMinimized: defaultMinimized
+            defaultMinimized: defaultMinimized,
+            autoPauseDisabled: autoPauseDisabled
         };
     }
     /**
@@ -237,7 +241,76 @@ class NeteaseMiniPlayer {
             if (this.playlist.length > 0) {
                 await this.loadCurrentSong();
                 if (this.config.autoplay && !this.config.embed) {
-                    this.play();
+                    // 静音自动播放策略（Silent Warm-up）
+                    // 1. 先静音启动
+                    this.audio.muted = true;
+                    // 双重保险：音量先设为0
+                    const originalVolume = this.volume;
+                    this.audio.volume = 0;
+                    
+                    try {
+                        await this.play();
+                    } catch (e) {
+                        console.log('静音自动播放被拦截，转为交互后播放');
+                    }
+                    
+                    // 2. 监听所有可能的用户交互事件来恢复音量
+                    const interactionEvents = ['click', 'touchstart', 'keydown', 'wheel', 'scroll'];
+                    
+                    const enableAudio = () => {
+                        // 移除所有监听器
+                        interactionEvents.forEach(event => {
+                            document.removeEventListener(event, enableAudio);
+                        });
+
+                        // 恢复音量设置（淡入效果）
+                        this.audio.muted = false;
+                        
+                        // 如果之前播放失败了（不在播放状态），则尝试再次播放
+                        if (!this.isPlaying) {
+                            this.play().then(() => {
+                                // 播放成功后开始淡入
+                                this.audio.volume = 0;
+                                fadeIn();
+                            }).catch(e => console.error('交互后播放失败:', e));
+                        } else {
+                            // 已经在静音播放中，直接淡入
+                            this.audio.volume = 0;
+                            fadeIn();
+                        }
+
+                        // 淡入动画函数
+                        const fadeIn = () => {
+                            let currentVol = 0;
+                            const targetVol = originalVolume;
+                            const step = targetVol / 10; // 分10步完成
+                            const interval = 50; // 每50ms一步，共500ms
+
+                            const fadeTimer = setInterval(() => {
+                                currentVol += step;
+                                if (currentVol >= targetVol) {
+                                    currentVol = targetVol;
+                                    clearInterval(fadeTimer);
+                                }
+                                this.audio.volume = currentVol;
+                                this.volume = currentVol; // 同步内部状态
+                            }, interval);
+                        };
+                    };
+                    
+                    if (this.isPlaying) {
+                        // 如果静音播放成功，只需要等待交互恢复音量
+                        interactionEvents.forEach(event => {
+                            document.addEventListener(event, enableAudio, { once: true, passive: true });
+                        });
+                    } else {
+                        // 如果静音播放也失败了，说明策略严格，必须等待交互才能开始播放
+                        this.audio.muted = false; // 恢复状态，等待交互
+                        this.audio.volume = originalVolume;
+                        interactionEvents.forEach(event => {
+                            document.addEventListener(event, enableAudio, { once: true, passive: true });
+                        });
+                    }
                 }
             }
             if (this.config.defaultMinimized && !this.config.embed && this.config.position !== 'static') {
@@ -1186,6 +1259,12 @@ class NeteaseMiniPlayer {
             this.elements.albumCover.classList.add('playing');
             this.element.classList.add('player-playing');
         } catch (error) {
+            // 如果是自动播放受阻，不显示错误提示，交给外部处理（如静音自动播放策略）
+            if (error.name === 'NotAllowedError') {
+                console.warn('自动播放被拦截 (NotAllowedError)');
+                this.isPlaying = false;
+                throw error;
+            }
             console.error('播放失败:', error);
             this.showError('播放失败');
         }
@@ -2289,4 +2368,4 @@ if (typeof module !== 'undefined' && module.exports) {
     };
 }
 
-console.log(["版本号 v2.1.0", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
+console.log(["版本号 v2.1.0.2", "NeteaseMiniPlayer V2 [NMPv2]", "BHCN STUDIO & 北海的佰川（ImBHCN[numakkiyu]）", "GitHub地址：https://github.com/numakkiyu/NeteaseMiniPlayer", "基于 Apache 2.0 开源协议发布"].join("\n"));
