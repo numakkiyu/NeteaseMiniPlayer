@@ -1,5 +1,24 @@
 # 🎵 [NMP v2] NeteaseMiniPlayer v2 网易云音乐迷你播放器
 
+> [!WARNING]
+> **NeteaseMiniPlayer v2 已停止维护。**
+>
+> 此仓库仅保留 v2 历史代码和文档，不再接受新功能、常规兼容性修复或新平台适配。
+> 新版本已迁移到 [numakkiyu/NeteaseMiniPlayer_v3](https://github.com/numakkiyu/NeteaseMiniPlayer_v3)。
+>
+> 推荐新项目使用 NMPv3 CDN：
+>
+> ```html
+> <script src="https://cdn.jsdelivr.net/npm/netease-mini-player-v3@latest/dist/nmpv3.min.js"></script>
+> ```
+>
+> 如果 v2 问题在 v3 中仍然存在，请到新仓库提交 issue：
+> <https://github.com/numakkiyu/NeteaseMiniPlayer_v3/issues>
+>
+> **NeteaseMiniPlayer v2 is no longer maintained.**
+> This repository is kept for historical v2 code and documentation only.
+> Please migrate to [NeteaseMiniPlayer_v3](https://github.com/numakkiyu/NeteaseMiniPlayer_v3).
+
 <div align="center">
 
 <img width="861" height="430" alt="NMPV2" src="https://github.com/numakkiyu/NeteaseMiniPlayer/blob/main/NMPV2.png" />
